@@ -24,13 +24,15 @@ public class Product {
 	private Integer product_quantity;
 
 	private Double product_price;
-	
+
 	private String product_brand;
-	
+
 	private Double product_rating;
-	
-	
-	
-	
+
+	private String product_type;
+
+	private String category;
+
+	private String weight;
 
 }
