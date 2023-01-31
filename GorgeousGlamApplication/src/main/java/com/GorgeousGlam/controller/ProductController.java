@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.GorgeousGlam.exception.SessionException;
 import com.GorgeousGlam.model.Product;
+import com.GorgeousGlam.model.Session;
+import com.GorgeousGlam.model.UserType;
 import com.GorgeousGlam.service.IProductService;
+import com.GorgeousGlam.service.ISessionService;
 
 @RestController
 public class ProductController {
@@ -21,12 +25,22 @@ public class ProductController {
 	@Autowired
 	private IProductService productService;
 
-	@PostMapping("/products")
-	public ResponseEntity<Product> addProductHandler(@RequestBody Product product) {
+	@Autowired
+	private ISessionService sessionService;
 
-		Product savedProduct = productService.addProduct(product);
+	@PostMapping("/products/{adminId}/{sessionKey}")
+	public ResponseEntity<Product> addProductHandler(@PathVariable("adminId") Integer adminId,
+			@PathVariable("sessionKey") String sessionKey, @RequestBody Product product) {
 
-		return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+		Session session = sessionService.getSessionByKey(sessionKey);
+
+		if (session.getUserId() == adminId && session.getUserType() == UserType.ADMIN) {
+			Product savedProduct = productService.addProduct(product);
+
+			return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+		} else {
+			throw new SessionException("Please login before adding product..");
+		}
 
 	}
 
