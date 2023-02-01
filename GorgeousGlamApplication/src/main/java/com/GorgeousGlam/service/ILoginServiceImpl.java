@@ -10,10 +10,13 @@ import org.springframework.stereotype.Service;
 
 import com.GorgeousGlam.DTO.LoginDTO;
 import com.GorgeousGlam.exception.AdminException;
+import com.GorgeousGlam.exception.CustomerException;
 import com.GorgeousGlam.model.Admin;
+import com.GorgeousGlam.model.Customer;
 import com.GorgeousGlam.model.Session;
 import com.GorgeousGlam.model.UserType;
 import com.GorgeousGlam.repository.AdminRepo;
+import com.GorgeousGlam.repository.CustomerRepo;
 import com.GorgeousGlam.repository.SessionRepo;
 
 import net.bytebuddy.utility.RandomString;
@@ -23,6 +26,9 @@ public class ILoginServiceImpl implements ILoginService {
 
 	@Autowired
 	private AdminRepo adminRepo;
+
+	@Autowired
+	private CustomerRepo customerRepo;
 
 	@Autowired
 	private SessionRepo sessionRepo;
@@ -62,6 +68,35 @@ public class ILoginServiceImpl implements ILoginService {
 
 			currSession = sessionRepo.save(newSession);
 
+		} else if (loginDto.getUserType() == UserType.CUSTOMER) {
+			Customer customer = customerRepo.findByEmail(loginDto.getEmail());
+
+			if (customer == null) {
+				throw new CustomerException("No customer found by email: " + loginDto.getEmail());
+			}
+
+			Integer userId = customer.getCustomerId();
+
+			Optional<Session> opt = sessionRepo.findById(userId);
+
+			if (opt.isPresent()) {
+				throw new LoginException("Customer already logged in");
+			}
+
+			if (!customer.getPassword().equals(loginDto.getPassword())) {
+				throw new LoginException("Incorrect password..");
+			}
+
+			String key = RandomString.make(6);
+
+			Session newSession = new Session();
+
+			newSession.setSessionKey(key);
+			newSession.setTimeStamp(LocalDateTime.now());
+			newSession.setUserId(userId);
+			newSession.setUserType(UserType.CUSTOMER);
+
+			currSession = sessionRepo.save(newSession);
 		}
 
 		return currSession;
