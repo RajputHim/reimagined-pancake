@@ -1,15 +1,15 @@
 package com.GorgeousGlam.model;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 public class Customer {
@@ -25,6 +25,12 @@ public class Customer {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private Address address;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Cart cart = new Cart();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
+	private List<Order> orders;
 
 	public Customer() {
 		// TODO Auto-generated constructor stub
@@ -75,6 +81,22 @@ public class Customer {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 
 }
