@@ -21,7 +21,7 @@ public class AdminController {
 	@Autowired
 	private IAdminService adminService;
 
-	@PostMapping("/admin")
+	@PostMapping("/admins")
 	public ResponseEntity<Admin> addAdminHandler(@RequestBody AdminDTO admin) {
 
 		Admin savedAdmin = adminService.addAdmin(admin);
@@ -30,7 +30,7 @@ public class AdminController {
 
 	}
 
-	@DeleteMapping("/admin/id/{aId}")
+	@DeleteMapping("/admins/id/{aId}")
 	public ResponseEntity<Admin> deleteAdminByIdHandler(@PathVariable("aId") Integer aId) {
 
 		Admin deletedAdmin = adminService.deleteAdminById(aId);
@@ -39,7 +39,7 @@ public class AdminController {
 
 	}
 
-	@PatchMapping("/admin")
+	@PatchMapping("/admins")
 	public ResponseEntity<Admin> updateAdminDetailsHandler(@RequestBody Admin admin) {
 
 		Admin updatedAdmin = adminService.updateAdminDetails(admin);
@@ -48,12 +48,12 @@ public class AdminController {
 
 	}
 
-	@GetMapping("/admin/id/{aId}")
+	@GetMapping("/admins/id/{aId}")
 	public ResponseEntity<Admin> viewAdminDetailsHandler(@PathVariable("aId") Integer aId) {
 
 		Admin admin = adminService.getAdminDetailsById(aId);
 
-		return new ResponseEntity<>(admin, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(admin, HttpStatus.OK);
 
 	}
 
