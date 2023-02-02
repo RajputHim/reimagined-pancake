@@ -24,10 +24,7 @@ public class Cart {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer cartId;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Product> products = new ArrayList<>();
-
-	@OneToOne
-	private Customer customer;
 
 }

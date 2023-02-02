@@ -12,29 +12,33 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Order {
+@AllArgsConstructor
+public class Orders {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer bookingOrderId;
 
-	private LocalDateTime orderDate;
-
 	private String transactionMode;
 
-	private Integer quantity;
+	private Double totalCost;
 
-	private double totalCost;
-
+	private Integer totalQuantity;
+	
+	private LocalDateTime orderDateTime;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 
 	@OneToOne
-//	@JsonIgnore
+	@JsonIgnore
 	private Cart cart;
+
 }

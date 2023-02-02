@@ -12,7 +12,7 @@ import com.GorgeousGlam.model.Customer;
 import com.GorgeousGlam.repository.CustomerRepo;
 
 @Service
-public class ICustomerServiceImpl implements ICustomerService {
+public class CustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	private CustomerRepo customerRepo;

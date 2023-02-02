@@ -22,7 +22,7 @@ import com.GorgeousGlam.repository.SessionRepo;
 import net.bytebuddy.utility.RandomString;
 
 @Service
-public class ILoginServiceImpl implements ILoginService {
+public class LoginServiceImpl implements ILoginService {
 
 	@Autowired
 	private AdminRepo adminRepo;

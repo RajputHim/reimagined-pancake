@@ -26,11 +26,11 @@ public class Customer {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Address address;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Cart cart = new Cart();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
-	private List<Order> orders;
+	private List<Orders> orders;
 
 	public Customer() {
 		// TODO Auto-generated constructor stub
@@ -91,12 +91,12 @@ public class Customer {
 		this.cart = cart;
 	}
 
-	public List<Order> getOrders() {
-		return orders;
-	}
-
-	public void setOrders(List<Order> orders) {
-		this.orders = orders;
-	}
+//	public List<Order> getOrders() {
+//		return orders;
+//	}
+//
+//	public void setOrders(List<Order> orders) {
+//		this.orders = orders;
+//	}
 
 }
