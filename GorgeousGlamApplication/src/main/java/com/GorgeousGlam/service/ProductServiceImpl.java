@@ -11,7 +11,7 @@ import com.GorgeousGlam.model.Product;
 import com.GorgeousGlam.repository.ProductRepo;
 
 @Service
-public class IProductServiceImpl implements IProductService {
+public class ProductServiceImpl implements IProductService {
 
 	@Autowired
 	private ProductRepo productRepo;

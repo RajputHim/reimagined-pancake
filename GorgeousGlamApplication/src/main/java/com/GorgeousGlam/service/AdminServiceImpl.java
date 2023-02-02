@@ -9,7 +9,7 @@ import com.GorgeousGlam.model.Admin;
 import com.GorgeousGlam.repository.AdminRepo;
 
 @Service
-public class IAdminServiceImpl implements IAdminService {
+public class AdminServiceImpl implements IAdminService {
 
 	@Autowired
 	private AdminRepo adminRepo;

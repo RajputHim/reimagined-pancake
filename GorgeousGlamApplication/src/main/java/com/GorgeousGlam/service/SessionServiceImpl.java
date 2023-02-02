@@ -8,7 +8,7 @@ import com.GorgeousGlam.model.Session;
 import com.GorgeousGlam.repository.SessionRepo;
 
 @Service
-public class ISessionServiceImpl implements ISessionService {
+public class SessionServiceImpl implements ISessionService {
 
 	@Autowired
 	private SessionRepo sessionRepo;
