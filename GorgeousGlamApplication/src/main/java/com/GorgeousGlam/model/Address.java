@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,14 +20,18 @@ public class Address {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer addressId;
 
+	@NotNull(message = "House number cannot be null")
 	private String houseNo;
 
 	private String colony;
-
+	
+	@NotNull(message = "City name cannot be null")
 	private String city;
 
+	@NotNull(message = "State name cannot be null")
 	private String state;
 
+	@NotNull(message = "Pincode cannot be null")
 	private Integer pinCode;
 
 	@OneToOne(mappedBy = "address", cascade = CascadeType.ALL)

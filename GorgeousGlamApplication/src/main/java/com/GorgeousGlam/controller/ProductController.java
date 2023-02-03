@@ -2,6 +2,8 @@ package com.GorgeousGlam.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class ProductController {
 
 	@PostMapping("/products/{adminId}/{sessionKey}")
 	public ResponseEntity<Product> addProductHandler(@PathVariable("adminId") Integer adminId,
-			@PathVariable("sessionKey") String sessionKey, @RequestBody Product product) {
+			@PathVariable("sessionKey") String sessionKey, @Valid @RequestBody Product product) {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 
