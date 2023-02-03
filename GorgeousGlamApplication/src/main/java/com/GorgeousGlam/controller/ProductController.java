@@ -55,12 +55,21 @@ public class ProductController {
 
 	}
 
-	@DeleteMapping("/products/id/{pId}")
-	public ResponseEntity<Product> deleteProductByIdHandler(@PathVariable("pId") Integer pId) {
+	@DeleteMapping("/products/{pId}/{adminId}")
+	public ResponseEntity<Product> deleteProductByIdHandler(@PathVariable("pId") Integer pId,
+			@PathVariable("adminId") Integer adminId, @PathVariable("sessionKey") String sessionKey) {
 
-		Product deletedProduct = productService.deleteProductById(pId);
+		Session session = sessionService.getSessionByKey(sessionKey);
 
-		return new ResponseEntity<>(deletedProduct, HttpStatus.ACCEPTED);
+		if (session.getUserId() == adminId && session.getUserType() == UserType.ADMIN) {
+
+			Product deletedProduct = productService.deleteProductById(pId);
+
+			return new ResponseEntity<>(deletedProduct, HttpStatus.ACCEPTED);
+
+		} else {
+			throw new SessionException("Please login before deleting product..");
+		}
 
 	}
 
