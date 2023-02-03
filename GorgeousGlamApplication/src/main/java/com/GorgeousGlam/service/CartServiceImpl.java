@@ -1,5 +1,6 @@
 package com.GorgeousGlam.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,44 @@ public class CartServiceImpl implements ICartService {
 		} else {
 			throw new CustomerException("No customer found by id:" + customerId);
 		}
+	}
+
+	@Override
+	public Cart deleteProductFromCart(Integer product_Id, Integer customerId)
+			throws ProductNotFoundException, CustomerException {
+		Customer customer = customerService.getCustomerDetailsById(customerId);
+
+		if (customer != null) {
+			Cart pCart = customer.getCart();
+
+			List<Product> products = pCart.getProducts();
+			boolean removed = false;
+			for (Product product : products) {
+				if (product.getProduct_id() == product_Id) {
+					products.remove(products.indexOf(product));
+					removed = true;
+				}
+			}
+
+			if (removed) {
+
+				return cartRepo.save(pCart);
+
+			} else {
+				throw new ProductNotFoundException("No product found by id: " + product_Id);
+			}
+
+		} else {
+			throw new CustomerException("No customer found by id:" + customerId);
+		}
+
+	}
+
+	@Override
+	public Cart changeProductQuantity(Integer product_Id, Integer customerId)
+			throws ProductNotFoundException, CustomerException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
