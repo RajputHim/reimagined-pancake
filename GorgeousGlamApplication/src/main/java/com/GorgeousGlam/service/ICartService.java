@@ -14,7 +14,7 @@ public interface ICartService {
 	public Cart deleteProductFromCart(Integer product_Id, Integer customerId)
 			throws ProductNotFoundException, CustomerException;
 
-	public Cart changeProductQuantity(Integer product_Id, Integer customerId)
+	public Cart changeProductQuantity(Integer product_Id, Integer customerId, Integer newQuantity)
 			throws ProductNotFoundException, CustomerException;
 
 }

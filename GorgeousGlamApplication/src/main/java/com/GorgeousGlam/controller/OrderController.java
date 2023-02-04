@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,36 +54,64 @@ public class OrderController {
 		Session session = sessionService.getSessionByKey(sessionKey);
 		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			Cart cart = cartService.viewCartbyId(cartId, customerId);
-			order.setCart(cart);
-			order.setCustomer(customerService.getCustomerDetailsById(customerId));
-
-			List<Product> products = cart.getProducts();
-			double totalCost = 0;
-			int totalQt = 0;
-			for (Product product : products) {
-				totalCost += product.getProduct_price() * product.getProduct_quantity();
-				totalQt += product.getProduct_quantity();
-			}
-
-			order.setTotalQuantity(totalQt);
-			order.setTotalCost(totalCost);
-
-			Orders placedOrder = orderService.addOrder(order);
+			Orders placedOrder = orderService.addOrder(order, cartId, customerId);
 
 			return new ResponseEntity<Orders>(placedOrder, HttpStatus.CREATED);
 
 		} else {
-			throw new SessionException("Please login with the correct credentials");
+			throw new SessionException("Please login with correct credentials");
 		}
 	}
 
 	@GetMapping("/orders/id/{userId}")
-	public ResponseEntity<Orders> viewOrderHandler(@PathVariable("userId") Integer userId) {
+	public ResponseEntity<Orders> viewOrderByIdHandler(@PathVariable("userId") Integer userId,
+			@RequestParam("sessionKey") String sessionKey) {
 
-		Orders orders = orderService.viewOrderById(userId);
+		Session session = sessionService.getSessionByKey(sessionKey);
+		if (session.getUserId() == userId && session.getUserType() == UserType.CUSTOMER) {
 
-		return new ResponseEntity<Orders>(orders, HttpStatus.ACCEPTED);
+			Orders orders = orderService.viewOrderById(userId);
+
+			return new ResponseEntity<Orders>(orders, HttpStatus.OK);
+
+		} else {
+			throw new SessionException("Please login with correct credentials");
+		}
 
 	}
+
+	@GetMapping("/orders/{customerId}")
+	public ResponseEntity<List<Orders>> viewAllOrderHandler(@PathVariable("customerId") Integer customerId,
+			@RequestParam("sessionKey") String sessionKey) {
+
+		Session session = sessionService.getSessionByKey(sessionKey);
+		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
+
+			List<Orders> allOrders = orderService.viewAllOrders();
+
+			return new ResponseEntity<List<Orders>>(allOrders, HttpStatus.OK);
+
+		} else {
+			throw new SessionException("Please login with correct credentials");
+		}
+
+	}
+
+	@DeleteMapping("/orders/{customerId}")
+	public ResponseEntity<Orders> deleteOrderByIdHandler(@PathVariable("orderId") Integer orderId,
+			@PathVariable("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey) {
+
+		Session session = sessionService.getSessionByKey(sessionKey);
+		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
+
+			Orders deletedOrders = orderService.deleteOrdrerById(orderId);
+
+			return new ResponseEntity<Orders>(deletedOrders, HttpStatus.OK);
+
+		} else {
+			throw new SessionException("Please login with correct credentials");
+		}
+
+	}
+
 }

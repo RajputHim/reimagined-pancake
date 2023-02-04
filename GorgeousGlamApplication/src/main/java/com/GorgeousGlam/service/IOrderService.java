@@ -6,14 +6,14 @@ import com.GorgeousGlam.exception.OrderException;
 import com.GorgeousGlam.model.Orders;
 
 public interface IOrderService {
-	
-	public Orders addOrder(Orders orders) throws OrderException;
+
+	public Orders addOrder(Orders orders, Integer cartId, Integer customerId) throws OrderException;
 
 	public List<Orders> viewAllOrders() throws OrderException;
 
-	public Orders viewOrderById(Integer id) throws OrderException;
+	public Orders viewOrderById(Integer order_Id) throws OrderException;
 
-//	public Order deleteOrdrerById(Integer id) throws OrderException;
-//
-//	public Order updateOrder(Order orders) throws OrderException;
+	public Orders deleteOrdrerById(Integer order_Id) throws OrderException;
+
+//	public Orders updateOrder(Order orders) throws OrderException;
 }

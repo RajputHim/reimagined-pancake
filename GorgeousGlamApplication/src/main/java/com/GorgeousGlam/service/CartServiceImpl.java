@@ -98,10 +98,46 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public Cart changeProductQuantity(Integer product_Id, Integer customerId)
+	public Cart changeProductQuantity(Integer product_Id, Integer customerId, Integer newQuantity)
 			throws ProductNotFoundException, CustomerException {
-		// TODO Auto-generated method stub
-		return null;
+
+		Customer customer = customerService.getCustomerDetailsById(customerId);
+
+		if (customer != null) {
+			Cart pCart = customer.getCart();
+
+			List<Product> products = pCart.getProducts();
+			boolean updated = false;
+			for (Product product : products) {
+				if (product.getProduct_id() == product_Id) {
+
+					Product productInStore = productRepo.findById(product_Id).orElseThrow(
+							() -> new ProductNotFoundException("Product not found in store by id: " + product_Id));
+
+					if (productInStore.getProduct_quantity() >= newQuantity) {
+						product.setProduct_quantity(newQuantity);
+						updated = true;
+
+					} else {
+						throw new ProductNotFoundException(
+								"Please enter quantity lesser or equal to " + productInStore.getProduct_quantity());
+					}
+
+				}
+			}
+
+			if (updated) {
+
+				return cartRepo.save(pCart);
+
+			} else {
+				throw new ProductNotFoundException("No product found by id: " + product_Id);
+			}
+
+		} else {
+			throw new CustomerException("No customer found by id:" + customerId);
+		}
+
 	}
 
 }
