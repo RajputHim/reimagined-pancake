@@ -13,6 +13,16 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<MyErrorDetails> myMANVExceptionHandler(MethodArgumentNotValidException me) {
+
+		MyErrorDetails err = new MyErrorDetails(LocalDateTime.now(), "Validation Error",
+				me.getBindingResult().getFieldError().getDefaultMessage());
+
+		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+
+	}
+
 	@ExceptionHandler(OrderException.class)
 	public ResponseEntity<MyErrorDetails> OrderExceptionHandler(OrderException oe, WebRequest req) {
 
@@ -65,21 +75,8 @@ public class GlobalExceptionHandler {
 
 	}
 
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<MyErrorDetails> genericExceptionHandler(Exception ge, WebRequest req) {
-
-		MyErrorDetails err = new MyErrorDetails();
-
-		err.setTimestamp(LocalDateTime.now());
-		err.setMessage(ge.getMessage());
-		err.setDetails(req.getDescription(false));
-
-		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
-
-	}
-
 	@ExceptionHandler(NoHandlerFoundException.class)
-	public ResponseEntity<MyErrorDetails> myexpHandler4(NoHandlerFoundException ne, WebRequest req) {
+	public ResponseEntity<MyErrorDetails> myNoHandlerFoundException(NoHandlerFoundException ne, WebRequest req) {
 
 		MyErrorDetails err = new MyErrorDetails();
 
@@ -91,13 +88,14 @@ public class GlobalExceptionHandler {
 
 	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<MyErrorDetails> myMANVExceptionHandler(MethodArgumentNotValidException me) {
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<MyErrorDetails> genericExceptionHandler(Exception ge, WebRequest req) {
 
 		MyErrorDetails err = new MyErrorDetails();
+
 		err.setTimestamp(LocalDateTime.now());
-		err.setDetails("Validation Error");
-		err.setMessage(me.getBindingResult().getFieldError().getDefaultMessage());
+		err.setMessage(ge.getMessage());
+		err.setDetails(req.getDescription(false));
 
 		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
 
