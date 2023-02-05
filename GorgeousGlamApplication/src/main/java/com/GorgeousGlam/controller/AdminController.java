@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,7 +18,6 @@ import com.GorgeousGlam.DTO.AdminDTO;
 import com.GorgeousGlam.exception.AdminException;
 import com.GorgeousGlam.exception.SessionException;
 import com.GorgeousGlam.model.Admin;
-import com.GorgeousGlam.model.Customer;
 import com.GorgeousGlam.model.Session;
 import com.GorgeousGlam.model.UserType;
 import com.GorgeousGlam.service.IAdminService;
@@ -35,8 +33,7 @@ public class AdminController {
 	private ISessionService sessionService;
 
 	@PostMapping("/admins")
-	public ResponseEntity<Admin> addAdminHandler(@Valid @RequestBody AdminDTO admin)
-			throws AdminException, MethodArgumentNotValidException {
+	public ResponseEntity<Admin> addAdminHandler(@Valid @RequestBody AdminDTO admin) throws AdminException {
 
 		Admin savedAdmin = adminService.addAdmin(admin);
 
