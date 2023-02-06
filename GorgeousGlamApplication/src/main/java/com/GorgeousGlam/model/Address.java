@@ -9,6 +9,8 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +20,7 @@ import lombok.NoArgsConstructor;
 public class Address {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@JsonProperty(access = Access.READ_ONLY)
 	private Integer addressId;
 
 	@NotNull(message = "House number cannot be null")
