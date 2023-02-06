@@ -28,7 +28,7 @@ public class CartServiceImpl implements ICartService {
 	private ICustomerService customerService;
 
 	@Override
-	public Cart addProductToCart(Integer product_Id, Integer customerId)
+	public Cart addProductToCart(Integer product_Id, Integer customerId, Integer quantity)
 			throws ProductNotFoundException, CustomerException {
 
 		Customer customer = customerService.getCustomerDetailsById(customerId);
@@ -40,7 +40,14 @@ public class CartServiceImpl implements ICartService {
 			if (productOpt.isPresent()) {
 				Cart pCart = customer.getCart();
 
-				pCart.getProducts().add(productOpt.get());
+				Product existingProduct = productOpt.get();
+
+				Product product = new Product(product_Id, existingProduct.getProduct_name(), quantity,
+						existingProduct.getProduct_price(), existingProduct.getProduct_brand(),
+						existingProduct.getProduct_rating(), existingProduct.getProduct_type(),
+						existingProduct.getCategory(), existingProduct.getWeight());
+
+				pCart.getProducts().add(product);
 
 				return cartRepo.save(pCart);
 
@@ -121,7 +128,8 @@ public class CartServiceImpl implements ICartService {
 
 					} else {
 						throw new ProductNotFoundException(
-								"Please enter quantity lesser or equal to " + productInStore.getProduct_quantity());
+								"Please enter quantity greater than or equal to 1 or less than or equal to "
+										+ productInStore.getProduct_quantity());
 					}
 
 				}

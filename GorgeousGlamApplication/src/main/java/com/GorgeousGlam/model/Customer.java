@@ -27,17 +27,17 @@ public class Customer {
 	@JsonProperty(access = Access.READ_ONLY)
 	private Integer customerId;
 
-	@NotNull
-	@NotBlank
-	@NotEmpty
+	@NotNull(message = "Customer name cannot be null")
+	@NotBlank(message = "Customer name cannot be blank")
+	@NotEmpty(message = "Customer name cannot be empty")
 	private String name;
-	
+
 	@Email
 	private String email;
-	
+
 	@Size(min = 8, max = 16, message = "Password length should be minimum 8 and maximum 16")
 	private String password;
-	
+
 	@NotNull
 	@OneToOne(cascade = CascadeType.ALL)
 	private Address address;

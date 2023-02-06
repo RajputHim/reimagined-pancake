@@ -7,7 +7,7 @@ import com.GorgeousGlam.model.Cart;
 
 public interface ICartService {
 
-	public Cart addProductToCart(Integer product_Id, Integer customerId)
+	public Cart addProductToCart(Integer product_Id, Integer customerId, Integer quantity)
 			throws ProductNotFoundException, CustomerException;
 
 	public Cart viewCartbyId(Integer cartId, Integer customerId) throws CustomerException, CartException;

@@ -29,9 +29,10 @@ public class CartController {
 	@Autowired
 	private ISessionService sessionService;
 
-	@PostMapping("/carts/products/{product_Id}")
+	@PostMapping("/carts/products/{product_Id}/{quantity}")
 	public ResponseEntity<Cart> addProductToCartHandler(@RequestParam("customerId") Integer customerId,
-			@RequestParam("sessionKey") String sessionKey, @PathVariable("product_Id") Integer product_Id)
+			@RequestParam("sessionKey") String sessionKey, @PathVariable("product_Id") Integer product_Id,
+			@PathVariable("quantity") Integer quantity)
 			throws SessionException, ProductNotFoundException, CustomerException {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
@@ -42,7 +43,7 @@ public class CartController {
 
 		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			Cart updatedCart = cartService.addProductToCart(product_Id, customerId);
+			Cart updatedCart = cartService.addProductToCart(product_Id, customerId, quantity);
 
 			return new ResponseEntity<Cart>(updatedCart, HttpStatus.ACCEPTED);
 
