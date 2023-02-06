@@ -97,7 +97,7 @@ public class OrderController {
 
 	}
 
-	@DeleteMapping("/orders/{customerId}")
+	@DeleteMapping("/orders/{orderId}/{customerId}")
 	public ResponseEntity<Orders> deleteOrderByIdHandler(@PathVariable("orderId") Integer orderId,
 			@PathVariable("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey) {
 

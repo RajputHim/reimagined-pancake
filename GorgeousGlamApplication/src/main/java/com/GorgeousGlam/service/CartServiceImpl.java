@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.GorgeousGlam.exception.CartException;
 import com.GorgeousGlam.exception.CustomerException;
 import com.GorgeousGlam.exception.ProductNotFoundException;
 import com.GorgeousGlam.model.Cart;
@@ -54,12 +55,12 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public Cart viewCartbyId(Integer cartId, Integer customerId) throws CustomerException {
+	public Cart viewCartbyId(Integer cartId, Integer customerId) throws CustomerException, CartException {
 		Customer customer = customerService.getCustomerDetailsById(customerId);
 
 		if (customer != null) {
 
-			return cartRepo.findById(cartId).orElseThrow(() -> new CustomerException());
+			return cartRepo.findById(cartId).orElseThrow(() -> new CartException("No cart found by id: " + cartId));
 
 		} else {
 			throw new CustomerException("No customer found by id:" + customerId);
