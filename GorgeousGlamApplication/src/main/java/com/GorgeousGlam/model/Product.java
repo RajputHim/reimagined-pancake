@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,6 +43,9 @@ public class Product {
 
 	private String product_type;
 
+	@NotNull(message = "Category cannot be null")
+	@NotBlank(message = "Category cannot be blank")
+	@NotEmpty(message = "Category cannot be empty")
 	private String category;
 
 	private String weight;
