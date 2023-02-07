@@ -64,4 +64,15 @@ public class ProductServiceImpl implements IProductService {
 
 	}
 
+	@Override
+	public List<Product> addMultipleProducts(List<Product> products) {
+		List<Product> savedProducts = productRepo.saveAll(products);
+
+		if (savedProducts.isEmpty()) {
+			throw new ProductNotFoundException("Products not saved..");
+		}
+
+		return savedProducts;
+	}
+
 }

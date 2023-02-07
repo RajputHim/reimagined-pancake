@@ -46,6 +46,22 @@ public class ProductController {
 
 	}
 
+	@PostMapping("/multipleProducts/{adminId}/{sessionKey}")
+	public ResponseEntity<List<Product>> addMultipleProductsHandler(@PathVariable("adminId") Integer adminId,
+			@PathVariable("sessionKey") String sessionKey, @Valid @RequestBody List<Product> products) {
+
+		Session session = sessionService.getSessionByKey(sessionKey);
+
+		if (session.getUserId() == adminId && session.getUserType() == UserType.ADMIN) {
+			List<Product> savedProducts = productService.addMultipleProducts(products);
+
+			return new ResponseEntity<>(savedProducts, HttpStatus.CREATED);
+		} else {
+			throw new SessionException("Please login before adding product..");
+		}
+
+	}
+
 	@GetMapping("/products/id/{pId}")
 	public ResponseEntity<Product> viewProductByIdHandler(@PathVariable("pId") Integer pId) {
 

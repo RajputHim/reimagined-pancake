@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.GorgeousGlam.exception.OrderException;
+import com.GorgeousGlam.exception.ProductNotFoundException;
 import com.GorgeousGlam.model.Cart;
 import com.GorgeousGlam.model.Orders;
 import com.GorgeousGlam.model.Product;
@@ -25,13 +26,17 @@ public class OrderServiceImpl implements IOrderService {
 	private ICustomerService customerService;
 
 	@Override
-	public Orders addOrder(Orders orders, Integer cartId, Integer customerId) throws OrderException {
+	public Orders addOrder(Orders orders, Integer customerId) throws OrderException {
 
-		Cart cart = cartService.viewCartbyId(cartId, customerId);
+		Cart cart = cartService.viewCartbyId(customerService.getCustomerDetailsById(customerId).getCart().getCartId(),
+				customerId);
 		orders.setCart(cart);
 		orders.setCustomer(customerService.getCustomerDetailsById(customerId));
 
 		List<Product> products = cart.getProducts();
+		if (products.isEmpty()) {
+			throw new ProductNotFoundException("No product found in cart..");
+		}
 		double totalCost = 0;
 		int totalQt = 0;
 		for (Product product : products) {
@@ -49,6 +54,8 @@ public class OrderServiceImpl implements IOrderService {
 		if (saveOrder == null) {
 			throw new OrderException("Please first add product to the Order...");
 		}
+
+		cartService.emptyCart(customerService.getCustomerDetailsById(customerId).getCart().getCartId());
 
 		return saveOrder;
 

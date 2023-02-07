@@ -1,7 +1,10 @@
 package com.GorgeousGlam.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +30,14 @@ public class CartServiceImpl implements ICartService {
 	@Autowired
 	private ICustomerService customerService;
 
+	@Size(min = 1, message = "Minimum quantity should not be less than 1")
+	Integer quantity;
+
 	@Override
-	public Cart addProductToCart(Integer product_Id, Integer customerId, Integer quantity)
+	public Cart addProductToCart(Integer product_Id, Integer customerId, Integer quantityOfProduct)
 			throws ProductNotFoundException, CustomerException {
 
+		quantity = quantityOfProduct;
 		Customer customer = customerService.getCustomerDetailsById(customerId);
 
 		if (customer != null) {
@@ -146,6 +153,15 @@ public class CartServiceImpl implements ICartService {
 		} else {
 			throw new CustomerException("No customer found by id:" + customerId);
 		}
+
+	}
+
+	@Override
+	public void emptyCart(Integer cartId) throws CartException {
+
+		Cart cart = cartRepo.findById(cartId).orElseThrow(() -> new CartException("No cart found by id: " + cartId));
+
+		cart.setProducts(new ArrayList<>());
 
 	}
 

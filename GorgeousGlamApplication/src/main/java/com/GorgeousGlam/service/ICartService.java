@@ -18,4 +18,5 @@ public interface ICartService {
 	public Cart changeProductQuantity(Integer product_Id, Integer customerId, Integer newQuantity)
 			throws ProductNotFoundException, CustomerException;
 
+	public void emptyCart(Integer cartId) throws CartException;
 }
