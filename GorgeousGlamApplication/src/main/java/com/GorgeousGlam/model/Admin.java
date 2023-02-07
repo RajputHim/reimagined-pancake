@@ -10,6 +10,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,6 +36,7 @@ public class Admin {
 	private String email;
 
 	@Size(min = 8, max = 16, message = "Password length should be minimum 8 and maximum 16")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 }

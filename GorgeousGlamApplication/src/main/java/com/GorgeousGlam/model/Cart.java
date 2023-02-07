@@ -28,7 +28,7 @@ public class Cart {
 	@JsonProperty(access = Access.READ_ONLY)
 	private Integer cartId;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany
 	private List<Product> products = new ArrayList<>();
 
 }

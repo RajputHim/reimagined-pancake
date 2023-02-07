@@ -36,6 +36,7 @@ public class Customer {
 	private String email;
 
 	@Size(min = 8, max = 16, message = "Password length should be minimum 8 and maximum 16")
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	@NotNull
