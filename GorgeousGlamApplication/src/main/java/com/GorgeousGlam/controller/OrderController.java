@@ -46,15 +46,15 @@ public class OrderController {
 	@Autowired
 	private ICartService cartService;
 
-	@PostMapping(value = "/orders/id/{customerId}/{cartId}")
+	@PostMapping(value = "/orders/id/{customerId}")
 	public ResponseEntity<Orders> addOrdersHandler(@Valid @RequestBody Orders order,
-			@PathVariable("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey,
-			@PathVariable("cartId") Integer cartId) throws SessionException, CustomerException {
+			@PathVariable("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey)
+			throws SessionException, CustomerException {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			Orders placedOrder = orderService.addOrder(order, cartId, customerId);
+			Orders placedOrder = orderService.addOrder(order, customerId);
 
 			return new ResponseEntity<Orders>(placedOrder, HttpStatus.CREATED);
 
@@ -65,12 +65,12 @@ public class OrderController {
 
 	@GetMapping("/orders/id/{userId}")
 	public ResponseEntity<Orders> viewOrderByIdHandler(@PathVariable("userId") Integer userId,
-			@RequestParam("sessionKey") String sessionKey) {
+			@RequestParam("orderId") Integer orderId, @RequestParam("sessionKey") String sessionKey) {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 		if (session.getUserId() == userId && session.getUserType() == UserType.CUSTOMER) {
 
-			Orders orders = orderService.viewOrderById(userId);
+			Orders orders = orderService.viewOrderById(orderId);
 
 			return new ResponseEntity<Orders>(orders, HttpStatus.OK);
 
