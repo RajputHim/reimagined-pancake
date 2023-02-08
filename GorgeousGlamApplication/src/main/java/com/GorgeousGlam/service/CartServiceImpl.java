@@ -69,11 +69,11 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public Cart viewCartbyId(Integer cartId, Integer customerId) throws CustomerException, CartException {
+	public Cart viewCartbyId(Integer customerId) throws CustomerException, CartException {
 		Customer customer = customerService.getCustomerDetailsById(customerId);
 
 		if (customer != null) {
-
+			int cartId = customerService.getCustomerDetailsById(customerId).getCart().getCartId();
 			return cartRepo.findById(cartId).orElseThrow(() -> new CartException("No cart found by id: " + cartId));
 
 		} else {
@@ -157,12 +157,15 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public void emptyCart(Integer cartId) throws CartException {
+	public List<Product> emptyCart(Integer cartId) throws CartException {
 
 		Cart cart = cartRepo.findById(cartId).orElseThrow(() -> new CartException("No cart found by id: " + cartId));
 
+		List<Product> products = cart.getProducts();
 		cart.setProducts(new ArrayList<>());
 
+		cartRepo.save(cart);
+		return products;
 	}
 
 }

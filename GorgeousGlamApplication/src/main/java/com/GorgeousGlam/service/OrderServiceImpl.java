@@ -6,9 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.GorgeousGlam.DTO.AddressDTO;
+import com.GorgeousGlam.DTO.OrdersDTO;
 import com.GorgeousGlam.exception.OrderException;
 import com.GorgeousGlam.exception.ProductNotFoundException;
+import com.GorgeousGlam.model.Address;
 import com.GorgeousGlam.model.Cart;
+import com.GorgeousGlam.model.Customer;
 import com.GorgeousGlam.model.Orders;
 import com.GorgeousGlam.model.Product;
 import com.GorgeousGlam.repository.OrderRepo;
@@ -26,10 +30,10 @@ public class OrderServiceImpl implements IOrderService {
 	private ICustomerService customerService;
 
 	@Override
-	public Orders addOrder(Orders orders, Integer customerId) throws OrderException {
+	public OrdersDTO addOrder(Orders orders, Integer customerId) throws OrderException {
 
-		Cart cart = cartService.viewCartbyId(customerService.getCustomerDetailsById(customerId).getCart().getCartId(),
-				customerId);
+		Customer customer = customerService.getCustomerDetailsById(customerId);
+		Cart cart = cartService.viewCartbyId(customerId);
 		orders.setCart(cart);
 		orders.setCustomer(customerService.getCustomerDetailsById(customerId));
 
@@ -55,9 +59,22 @@ public class OrderServiceImpl implements IOrderService {
 			throw new OrderException("Please first add product to the Order...");
 		}
 
-		cartService.emptyCart(customerService.getCustomerDetailsById(customerId).getCart().getCartId());
+		List<Product> orderedProducts = cartService
+				.emptyCart(customerService.getCustomerDetailsById(customerId).getCart().getCartId());
 
-		return saveOrder;
+		OrdersDTO orderInfo = new OrdersDTO(saveOrder.getBookingOrderId(), saveOrder.getTransactionMode(), totalCost,
+				totalQt, saveOrder.getOrderDateTime(), customer.getName(), customer.getEmail());
+
+		Address address = customer.getAddress();
+
+		AddressDTO deliveryAddress = new AddressDTO(address.getHouseNo(), address.getColony(), address.getCity(),
+				address.getState(), address.getPinCode());
+
+		orderInfo.setAddress(deliveryAddress);
+
+		orderInfo.setProducts(orderedProducts);
+
+		return orderInfo;
 
 	}
 
