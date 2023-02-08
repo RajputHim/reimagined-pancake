@@ -2,12 +2,13 @@ package com.GorgeousGlam.service;
 
 import java.util.List;
 
+import com.GorgeousGlam.DTO.OrdersDTO;
 import com.GorgeousGlam.exception.OrderException;
 import com.GorgeousGlam.model.Orders;
 
 public interface IOrderService {
 
-	public Orders addOrder(Orders orders, Integer customerId) throws OrderException;
+	public OrdersDTO addOrder(Orders orders, Integer customerId) throws OrderException;
 
 	public List<Orders> viewAllOrders() throws OrderException;
 
