@@ -52,15 +52,14 @@ public class CartController {
 		}
 	}
 
-	@GetMapping("/carts/{cartId}")
-	public ResponseEntity<Cart> viewCartByIdHandler(@PathVariable("cartId") Integer cartId,
-			@RequestParam("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey)
-			throws CustomerException, SessionException {
+	@GetMapping("/carts")
+	public ResponseEntity<Cart> viewCartByIdHandler(@RequestParam("customerId") Integer customerId,
+			@RequestParam("sessionKey") String sessionKey) throws CustomerException, SessionException {
 		Session session = sessionService.getSessionByKey(sessionKey);
 
 		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			Cart cart = cartService.viewCartbyId(cartId, customerId);
+			Cart cart = cartService.viewCartbyId(customerId);
 
 			return new ResponseEntity<Cart>(cart, HttpStatus.ACCEPTED);
 
