@@ -34,7 +34,7 @@ public class CartServiceImpl implements ICartService {
 	Integer quantity;
 
 	@Override
-	public Cart addProductToCart(Integer product_Id, Integer customerId, Integer quantityOfProduct)
+	public Cart addProductToCart(Integer productId, Integer customerId, Integer quantityOfProduct)
 			throws ProductNotFoundException, CustomerException {
 
 		quantity = quantityOfProduct;
@@ -42,16 +42,16 @@ public class CartServiceImpl implements ICartService {
 
 		if (customer != null) {
 
-			Optional<Product> productOpt = productRepo.findById(product_Id);
+			Optional<Product> productOpt = productRepo.findById(productId);
 
 			if (productOpt.isPresent()) {
 				Cart pCart = customer.getCart();
 
 				Product existingProduct = productOpt.get();
 
-				Product product = new Product(product_Id, existingProduct.getProduct_name(), quantity,
-						existingProduct.getProduct_price(), existingProduct.getProduct_brand(),
-						existingProduct.getProduct_rating(), existingProduct.getProduct_type(),
+				Product product = new Product(productId, existingProduct.getProductName(), quantity,
+						existingProduct.getProductPrice(), existingProduct.getProductBrand(),
+						existingProduct.getProductRating(), existingProduct.getProductType(),
 						existingProduct.getCategory(), existingProduct.getWeight());
 
 				pCart.getProducts().add(product);
@@ -59,7 +59,7 @@ public class CartServiceImpl implements ICartService {
 				return cartRepo.save(pCart);
 
 			} else {
-				throw new ProductNotFoundException("No product found by id: " + product_Id);
+				throw new ProductNotFoundException("No product found by id: " + productId);
 			}
 
 		} else {
@@ -82,7 +82,7 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public Cart deleteProductFromCart(Integer product_Id, Integer customerId)
+	public Cart deleteProductFromCart(Integer productId, Integer customerId)
 			throws ProductNotFoundException, CustomerException {
 		Customer customer = customerService.getCustomerDetailsById(customerId);
 
@@ -92,7 +92,7 @@ public class CartServiceImpl implements ICartService {
 			List<Product> products = pCart.getProducts();
 			boolean removed = false;
 			for (Product product : products) {
-				if (product.getProduct_id() == product_Id) {
+				if (product.getProductId() == productId) {
 					products.remove(products.indexOf(product));
 					removed = true;
 				}
@@ -103,7 +103,7 @@ public class CartServiceImpl implements ICartService {
 				return cartRepo.save(pCart);
 
 			} else {
-				throw new ProductNotFoundException("No product found by id: " + product_Id);
+				throw new ProductNotFoundException("No product found by id: " + productId);
 			}
 
 		} else {
@@ -113,7 +113,7 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public Cart changeProductQuantity(Integer product_Id, Integer customerId, Integer newQuantity)
+	public Cart changeProductQuantity(Integer productId, Integer customerId, Integer newQuantity)
 			throws ProductNotFoundException, CustomerException {
 
 		Customer customer = customerService.getCustomerDetailsById(customerId);
@@ -124,19 +124,19 @@ public class CartServiceImpl implements ICartService {
 			List<Product> products = pCart.getProducts();
 			boolean updated = false;
 			for (Product product : products) {
-				if (product.getProduct_id() == product_Id) {
+				if (product.getProductId() == productId) {
 
-					Product productInStore = productRepo.findById(product_Id).orElseThrow(
-							() -> new ProductNotFoundException("Product not found in store by id: " + product_Id));
+					Product productInStore = productRepo.findById(productId).orElseThrow(
+							() -> new ProductNotFoundException("Product not found in store by id: " + productId));
 
-					if (productInStore.getProduct_quantity() >= newQuantity) {
-						product.setProduct_quantity(newQuantity);
+					if (productInStore.getProductQuantity() >= newQuantity) {
+						product.setProductQuantity(newQuantity);
 						updated = true;
 
 					} else {
 						throw new ProductNotFoundException(
 								"Please enter quantity greater than or equal to 1 or less than or equal to "
-										+ productInStore.getProduct_quantity());
+										+ productInStore.getProductQuantity());
 					}
 
 				}
@@ -147,7 +147,7 @@ public class CartServiceImpl implements ICartService {
 				return cartRepo.save(pCart);
 
 			} else {
-				throw new ProductNotFoundException("No product found by id: " + product_Id);
+				throw new ProductNotFoundException("No product found by id: " + productId);
 			}
 
 		} else {

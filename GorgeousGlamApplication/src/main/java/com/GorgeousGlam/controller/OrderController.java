@@ -45,7 +45,7 @@ public class OrderController {
 	@Autowired
 	private ICartService cartService;
 
-	@PostMapping(value = "/orders/id/{customerId}")
+	@PostMapping(value = "/orders/{customerId}")
 	public ResponseEntity<OrdersDTO> addOrdersHandler(@Valid @RequestBody Orders order,
 			@PathVariable("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey)
 			throws SessionException, CustomerException {
@@ -62,7 +62,7 @@ public class OrderController {
 		}
 	}
 
-	@GetMapping("/orders/id/{userId}")
+	@GetMapping("/orders/{userId}")
 	public ResponseEntity<Orders> viewOrderByIdHandler(@PathVariable("userId") Integer userId,
 			@RequestParam("orderId") Integer orderId, @RequestParam("sessionKey") String sessionKey) {
 

@@ -42,7 +42,7 @@ public class CustomerController {
 
 	}
 
-	@GetMapping("/customers/id/{userId}")
+	@GetMapping("/customers/{userId}")
 	public ResponseEntity<Customer> getCustomerByIdHandler(@PathVariable("userId") Integer userId,
 			@RequestParam("sessionKey") String sessionKey) {
 
@@ -65,8 +65,8 @@ public class CustomerController {
 
 	}
 
-	@GetMapping("/allCustomers/Id/{userId}")
-	public ResponseEntity<List<Customer>> getAllCustomersHandler(@PathVariable("userId") Integer userId,
+	@GetMapping("/customers/{adminId}")
+	public ResponseEntity<List<Customer>> getAllCustomersHandler(@PathVariable("adminId") Integer userId,
 			@RequestParam("sessionKey") String sessionKey) {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
@@ -88,7 +88,7 @@ public class CustomerController {
 
 	}
 
-	@DeleteMapping("/customers/Id/{userId}")
+	@DeleteMapping("/customers/{userId}")
 	public ResponseEntity<Customer> deleteCustomerByIdHandler(@PathVariable("userId") Integer userId,
 			@RequestParam("sessionKey") String sessionKey) {
 
@@ -111,7 +111,7 @@ public class CustomerController {
 
 	}
 
-	@PatchMapping("/customers/Id/{userId}")
+	@PatchMapping("/customers/{userId}")
 	public ResponseEntity<Customer> updateCustomerDetailsHandler(@PathVariable("userId") Integer userId,
 			@RequestParam("sessionKey") String sessionKey, @RequestBody Customer customer) {
 

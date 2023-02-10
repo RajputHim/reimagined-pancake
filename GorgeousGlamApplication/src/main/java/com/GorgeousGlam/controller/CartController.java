@@ -29,9 +29,9 @@ public class CartController {
 	@Autowired
 	private ISessionService sessionService;
 
-	@PostMapping("/carts/products/{product_Id}/{quantity}")
-	public ResponseEntity<Cart> addProductToCartHandler(@RequestParam("customerId") Integer customerId,
-			@RequestParam("sessionKey") String sessionKey, @PathVariable("product_Id") Integer product_Id,
+	@PostMapping("/carts/products/{productId}/{quantity}")
+	public ResponseEntity<Cart> addProductToCartHandler(@RequestParam("userId") Integer customerId,
+			@RequestParam("sessionKey") String sessionKey, @PathVariable("productId") Integer productId,
 			@PathVariable("quantity") Integer quantity)
 			throws SessionException, ProductNotFoundException, CustomerException {
 
@@ -43,7 +43,7 @@ public class CartController {
 
 		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			Cart updatedCart = cartService.addProductToCart(product_Id, customerId, quantity);
+			Cart updatedCart = cartService.addProductToCart(productId, customerId, quantity);
 
 			return new ResponseEntity<Cart>(updatedCart, HttpStatus.ACCEPTED);
 
@@ -53,7 +53,7 @@ public class CartController {
 	}
 
 	@GetMapping("/carts")
-	public ResponseEntity<Cart> viewCartByIdHandler(@RequestParam("customerId") Integer customerId,
+	public ResponseEntity<Cart> viewCartByIdHandler(@RequestParam("userId") Integer customerId,
 			@RequestParam("sessionKey") String sessionKey) throws CustomerException, SessionException {
 		Session session = sessionService.getSessionByKey(sessionKey);
 
@@ -68,16 +68,16 @@ public class CartController {
 		}
 	}
 
-	@DeleteMapping("/carts/{product_Id}")
-	public ResponseEntity<Cart> deleteProductFromCartHandler(@PathVariable("product_Id") Integer product_Id,
-			@RequestParam("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey)
+	@DeleteMapping("/carts/{productId}")
+	public ResponseEntity<Cart> deleteProductFromCartHandler(@PathVariable("productId") Integer productId,
+			@RequestParam("userId") Integer customerId, @RequestParam("sessionKey") String sessionKey)
 			throws CustomerException, SessionException {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 
 		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			Cart cart = cartService.deleteProductFromCart(product_Id, customerId);
+			Cart cart = cartService.deleteProductFromCart(productId, customerId);
 
 			return new ResponseEntity<Cart>(cart, HttpStatus.ACCEPTED);
 
@@ -86,16 +86,16 @@ public class CartController {
 		}
 	}
 
-	@PatchMapping("/carts/{product_Id}/{newQuantity}")
-	public ResponseEntity<Cart> updateProductQuantityHandler(@PathVariable("product_Id") Integer product_Id,
-			@PathVariable("newQuantity") Integer newQuantity, @RequestParam("customerId") Integer customerId,
+	@PatchMapping("/carts/{productId}/{newQuantity}")
+	public ResponseEntity<Cart> updateProductQuantityHandler(@PathVariable("productId") Integer productId,
+			@PathVariable("newQuantity") Integer newQuantity, @RequestParam("userId") Integer customerId,
 			@RequestParam("sessionKey") String sessionKey) throws CustomerException, SessionException {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 
 		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			Cart cart = cartService.changeProductQuantity(product_Id, customerId, newQuantity);
+			Cart cart = cartService.changeProductQuantity(productId, customerId, newQuantity);
 
 			return new ResponseEntity<Cart>(cart, HttpStatus.ACCEPTED);
 

@@ -44,8 +44,8 @@ public class OrderServiceImpl implements IOrderService {
 		double totalCost = 0;
 		int totalQt = 0;
 		for (Product product : products) {
-			totalCost += product.getProduct_price() * product.getProduct_quantity();
-			totalQt += product.getProduct_quantity();
+			totalCost += product.getProductPrice() * product.getProductQuantity();
+			totalQt += product.getProductQuantity();
 		}
 
 		orders.setTotalQuantity(totalQt);
