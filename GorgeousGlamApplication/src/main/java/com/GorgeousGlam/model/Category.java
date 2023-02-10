@@ -3,10 +3,12 @@ package com.GorgeousGlam.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Category {
@@ -15,6 +17,7 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer categoryId;
 
+	@OneToMany 
 	private List<Product> products = new ArrayList<>();
 
 	public Category() {

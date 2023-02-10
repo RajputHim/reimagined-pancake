@@ -1,5 +1,7 @@
 package com.GorgeousGlam.model;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,23 +27,23 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@JsonProperty(access = Access.READ_ONLY)
-	private Integer product_id;
+	private Integer productId;
 
 	@NotNull(message = "Product name cannot be null")
-	private String product_name;
+	private String productName;
 
 	@Min(value = 1)
-	private Integer product_quantity;
+	private Integer productQuantity;
 
 	@Min(value = 1)
-	private Double product_price;
+	private Double productPrice;
 
 	@NotNull(message = "Product brand name cannot be null")
-	private String product_brand;
+	private String productBrand;
 
-	private Double product_rating;
+	private Double productRating;
 
-	private String product_type;
+	private String productType;
 
 	@NotNull(message = "Category cannot be null")
 	@NotBlank(message = "Category cannot be blank")
@@ -49,5 +51,24 @@ public class Product {
 	private String category;
 
 	private String weight;
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		return Objects.equals(category, other.category) && Objects.equals(productBrand, other.productBrand)
+				&& Objects.equals(productName, other.productName) && Objects.equals(productPrice, other.productPrice)
+				&& Objects.equals(productType, other.productType) && Objects.equals(weight, other.weight);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(category, productBrand, productName, productPrice, productType, weight);
+	}
 
 }
