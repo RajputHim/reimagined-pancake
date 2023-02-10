@@ -7,9 +7,9 @@ import com.GorgeousGlam.model.Product;
 
 public interface IProductService {
 
-	public Product addProduct(Product product);
+	public List<Product> addProduct(List<Product> products);
 
-	public List<Product> addMultipleProducts(List<Product> products);
+//	public List<Product> addMultipleProducts(List<Product> products);
 
 	public Product deleteProductById(Integer pId) throws ProductNotFoundException;
 

@@ -1,5 +1,6 @@
 package com.GorgeousGlam.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,15 +18,32 @@ public class ProductServiceImpl implements IProductService {
 	private ProductRepo productRepo;
 
 	@Override
-	public Product addProduct(Product product) {
+	public List<Product> addProduct(List<Product> products) {
+		List<Product> savedProducts = new ArrayList<>();
+		boolean saved = false;
+		for (Product product : products) {
+			List<Product> existingProducts = productRepo.findByCategory(product.getCategory());
+			saved = false;
+			for (Product p : existingProducts) {
+				if (p.equals(product)) {
+					Product existingProduct = productRepo.findById(p.getProductId()).orElseThrow(
+							() -> new ProductNotFoundException("No product found by id: " + p.getProductId()));
+					existingProduct
+							.setProductQuantity(existingProduct.getProductQuantity() + product.getProductQuantity());
 
-		Product savedProduct = productRepo.save(product);
-
-		if (savedProduct == null) {
-			throw new ProductNotFoundException("Product not saved..");
+					Product savedProduct = productRepo.save(existingProduct);
+					savedProducts.add(savedProduct);
+					saved = true;
+					break;
+				}
+			}
+			if (!saved) {
+				Product savedProduct = productRepo.save(product);
+				savedProducts.add(savedProduct);
+			}
 		}
 
-		return savedProduct;
+		return savedProducts;
 
 	}
 
@@ -64,15 +82,15 @@ public class ProductServiceImpl implements IProductService {
 
 	}
 
-	@Override
-	public List<Product> addMultipleProducts(List<Product> products) {
-		List<Product> savedProducts = productRepo.saveAll(products);
-
-		if (savedProducts.isEmpty()) {
-			throw new ProductNotFoundException("Products not saved..");
-		}
-
-		return savedProducts;
-	}
+//	@Override
+//	public List<Product> addMultipleProducts(List<Product> products) {
+//		List<Product> savedProducts = productRepo.saveAll(products);
+//
+//		if (savedProducts.isEmpty()) {
+//			throw new ProductNotFoundException("Products not saved..");
+//		}
+//
+//		return savedProducts;
+//	}
 
 }
