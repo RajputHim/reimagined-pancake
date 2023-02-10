@@ -41,7 +41,7 @@ public class AdminController {
 
 	}
 
-	@DeleteMapping("/admins/id/{aId}")
+	@DeleteMapping("/admins/{aId}")
 	public ResponseEntity<Admin> deleteAdminByIdHandler(@PathVariable("aId") Integer aId,
 			@RequestParam("sessionKey") String sessionKey) {
 
@@ -62,7 +62,7 @@ public class AdminController {
 
 	}
 
-	@PatchMapping("/admins/id/{aId}")
+	@PatchMapping("/admins/{aId}")
 	public ResponseEntity<Admin> updateAdminDetailsHandler(@PathVariable("aId") Integer aId,
 			@RequestParam("sessionKey") String sessionKey, @RequestBody Admin admin) {
 
@@ -83,7 +83,7 @@ public class AdminController {
 
 	}
 
-	@GetMapping("/admins/id/{aId}")
+	@GetMapping("/admins/{aId}")
 	public ResponseEntity<Admin> viewAdminDetailsHandler(@PathVariable("aId") Integer aId,
 			@RequestParam("sessionKey") String sessionKey) {
 
