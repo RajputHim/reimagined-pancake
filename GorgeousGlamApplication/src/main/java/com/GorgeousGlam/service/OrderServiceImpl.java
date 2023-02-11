@@ -2,6 +2,8 @@ package com.GorgeousGlam.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +39,15 @@ public class OrderServiceImpl implements IOrderService {
 		orders.setCart(cart);
 		orders.setCustomer(customerService.getCustomerDetailsById(customerId));
 
-		List<Product> products = cart.getProducts();
+		Map<Product, Integer> products = cart.getProducts();
 		if (products.isEmpty()) {
 			throw new ProductNotFoundException("No product found in cart..");
 		}
 		double totalCost = 0;
 		int totalQt = 0;
-		for (Product product : products) {
+
+		Set<Product> productSet = products.keySet();
+		for (Product product : productSet) {
 			totalCost += product.getProductPrice() * product.getProductQuantity();
 			totalQt += product.getProductQuantity();
 		}
@@ -59,7 +63,7 @@ public class OrderServiceImpl implements IOrderService {
 			throw new OrderException("Please first add product to the Order...");
 		}
 
-		List<Product> orderedProducts = cartService
+		Map<Product, Integer> orderedProducts = cartService
 				.emptyCart(customerService.getCustomerDetailsById(customerId).getCart().getCartId());
 
 		OrdersDTO orderInfo = new OrdersDTO(saveOrder.getBookingOrderId(), saveOrder.getTransactionMode(), totalCost,

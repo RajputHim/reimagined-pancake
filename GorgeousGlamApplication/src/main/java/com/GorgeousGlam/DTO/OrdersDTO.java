@@ -2,6 +2,7 @@ package com.GorgeousGlam.DTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import com.GorgeousGlam.model.Product;
 
@@ -23,7 +24,7 @@ public class OrdersDTO {
 
 	private AddressDTO address;
 
-	private List<Product> products;
+	private Map<Product, Integer> products;
 
 	public OrdersDTO() {
 		// TODO Auto-generated constructor stub
@@ -105,11 +106,11 @@ public class OrdersDTO {
 		this.address = address;
 	}
 
-	public List<Product> getProducts() {
+	public Map<Product, Integer> getProducts() {
 		return products;
 	}
 
-	public void setProducts(List<Product> products) {
+	public void setProducts(Map<Product, Integer> products) {
 		this.products = products;
 	}
 
