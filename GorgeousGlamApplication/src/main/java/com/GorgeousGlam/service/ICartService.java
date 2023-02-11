@@ -1,6 +1,6 @@
 package com.GorgeousGlam.service;
 
-import java.util.List;
+import java.util.Map;
 
 import com.GorgeousGlam.exception.CartException;
 import com.GorgeousGlam.exception.CustomerException;
@@ -10,16 +10,16 @@ import com.GorgeousGlam.model.Product;
 
 public interface ICartService {
 
-	public Cart addProductToCart(Integer product_Id, Integer customerId, Integer quantity)
+	public Cart addProductToCart(Integer productId, Integer customerId, Integer quantity)
 			throws ProductNotFoundException, CustomerException;
 
 	public Cart viewCartbyId(Integer customerId) throws CustomerException, CartException;
 
-	public Cart deleteProductFromCart(Integer product_Id, Integer customerId)
+	public Cart deleteProductFromCart(Integer productId, Integer customerId)
 			throws ProductNotFoundException, CustomerException;
 
-	public Cart changeProductQuantity(Integer product_Id, Integer customerId, Integer newQuantity)
+	public Cart changeProductQuantity(Integer productId, Integer customerId, Integer newQuantity)
 			throws ProductNotFoundException, CustomerException;
 
-	public List<Product> emptyCart(Integer cartId) throws CartException;
+	public Map<Product, Integer> emptyCart(Integer cartId) throws CartException;
 }
