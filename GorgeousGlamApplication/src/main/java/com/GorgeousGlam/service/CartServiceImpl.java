@@ -1,10 +1,10 @@
 package com.GorgeousGlam.service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
-import javax.validation.constraints.Size;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,14 +30,10 @@ public class CartServiceImpl implements ICartService {
 	@Autowired
 	private ICustomerService customerService;
 
-	@Size(min = 1, message = "Minimum quantity should not be less than 1")
-	Integer quantity;
-
 	@Override
 	public Cart addProductToCart(Integer productId, Integer customerId, Integer quantityOfProduct)
 			throws ProductNotFoundException, CustomerException {
 
-		quantity = quantityOfProduct;
 		Customer customer = customerService.getCustomerDetailsById(customerId);
 
 		if (customer != null) {
@@ -45,18 +41,20 @@ public class CartServiceImpl implements ICartService {
 			Optional<Product> productOpt = productRepo.findById(productId);
 
 			if (productOpt.isPresent()) {
-				Cart pCart = customer.getCart();
 
 				Product existingProduct = productOpt.get();
+				if (existingProduct.getProductQuantity() >= quantityOfProduct && quantityOfProduct != 0) {
+					Cart pCart = customer.getCart();
 
-				Product product = new Product(productId, existingProduct.getProductName(), quantity,
-						existingProduct.getProductPrice(), existingProduct.getProductBrand(),
-						existingProduct.getProductRating(), existingProduct.getProductType(),
-						existingProduct.getCategory(), existingProduct.getWeight());
+					pCart.getProducts().put(existingProduct, quantityOfProduct);
 
-				pCart.getProducts().add(product);
+					cartRepo.save(pCart);
+					return customer.getCart();
 
-				return cartRepo.save(pCart);
+				} else {
+					throw new ProductNotFoundException("Minimum quantity should be 1 and maximum quantity should be "
+							+ existingProduct.getProductQuantity());
+				}
 
 			} else {
 				throw new ProductNotFoundException("No product found by id: " + productId);
@@ -89,11 +87,14 @@ public class CartServiceImpl implements ICartService {
 		if (customer != null) {
 			Cart pCart = customer.getCart();
 
-			List<Product> products = pCart.getProducts();
+			Map<Product, Integer> products = pCart.getProducts();
 			boolean removed = false;
-			for (Product product : products) {
+
+			Set<Product> productSet = products.keySet();
+
+			for (Product product : productSet) {
 				if (product.getProductId() == productId) {
-					products.remove(products.indexOf(product));
+					products.remove(product);
 					removed = true;
 				}
 			}
@@ -121,21 +122,22 @@ public class CartServiceImpl implements ICartService {
 		if (customer != null) {
 			Cart pCart = customer.getCart();
 
-			List<Product> products = pCart.getProducts();
+			Map<Product, Integer> products = pCart.getProducts();
 			boolean updated = false;
-			for (Product product : products) {
+			Set<Product> productSet = products.keySet();
+			for (Product product : productSet) {
 				if (product.getProductId() == productId) {
 
 					Product productInStore = productRepo.findById(productId).orElseThrow(
 							() -> new ProductNotFoundException("Product not found in store by id: " + productId));
 
-					if (productInStore.getProductQuantity() >= newQuantity) {
+					if (newQuantity <= productInStore.getProductQuantity() && newQuantity > 0) {
 						product.setProductQuantity(newQuantity);
 						updated = true;
 
 					} else {
 						throw new ProductNotFoundException(
-								"Please enter quantity greater than or equal to 1 or less than or equal to "
+								"Minimum quantity should be 1 and maximum quantity should be "
 										+ productInStore.getProductQuantity());
 					}
 
@@ -157,12 +159,12 @@ public class CartServiceImpl implements ICartService {
 	}
 
 	@Override
-	public List<Product> emptyCart(Integer cartId) throws CartException {
+	public Map<Product, Integer> emptyCart(Integer cartId) throws CartException {
 
 		Cart cart = cartRepo.findById(cartId).orElseThrow(() -> new CartException("No cart found by id: " + cartId));
 
-		List<Product> products = cart.getProducts();
-		cart.setProducts(new ArrayList<>());
+		Map<Product, Integer> products = cart.getProducts();
+		cart.setProducts(new HashMap<Product, Integer>());
 
 		cartRepo.save(cart);
 		return products;

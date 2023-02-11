@@ -1,16 +1,13 @@
 package com.GorgeousGlam.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -28,7 +25,7 @@ public class Cart {
 	@JsonProperty(access = Access.READ_ONLY)
 	private Integer cartId;
 
-	@OneToMany
-	private List<Product> products = new ArrayList<>();
+	@ElementCollection
+	private Map<Product, Integer> products = new HashMap<>();
 
 }
