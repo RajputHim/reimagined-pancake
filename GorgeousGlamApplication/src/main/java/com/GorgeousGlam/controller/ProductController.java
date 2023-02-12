@@ -99,4 +99,33 @@ public class ProductController {
 
 	}
 
+	@GetMapping("/products/{category}")
+	public ResponseEntity<List<Product>> viewAllProductByCategoryHandler(@PathVariable("category") String category) {
+
+		List<Product> allProduct = productService.getAllProductByCategory(category);
+
+		return new ResponseEntity<>(allProduct, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/products/{productType}")
+	public ResponseEntity<List<Product>> viewAllProductByProductTypeHandler(
+			@PathVariable("productType") String productType) {
+
+		List<Product> allProduct = productService.getAllProductByProductType(productType);
+
+		return new ResponseEntity<>(allProduct, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/products/{startPrice}/{endPrice}")
+	public ResponseEntity<List<Product>> viewAllProductByPriceRangeHandler(
+			@PathVariable("startPrice") Double startPrice, @PathVariable("endPrice") Double endPrice) {
+
+		List<Product> allProduct = productService.getAllProductByPriceRange(startPrice, endPrice);
+
+		return new ResponseEntity<>(allProduct, HttpStatus.OK);
+
+	}
+
 }
