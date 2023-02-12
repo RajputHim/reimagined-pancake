@@ -17,8 +17,10 @@ public interface IProductService {
 
 	public List<Product> getAllProduct() throws ProductNotFoundException;
 
-//	public Product getAllProductByCategory() throws ProductNotFoundException;
-//	
-//	public Product getAllProductByProductType() throws ProductNotFoundException;
+	public List<Product> getAllProductByCategory(String category) throws ProductNotFoundException;
+
+	public List<Product> getAllProductByProductType(String productType) throws ProductNotFoundException;
+
+	public List<Product> getAllProductByPriceRange(Double startPrice, Double endPrice) throws ProductNotFoundException;
 
 }
