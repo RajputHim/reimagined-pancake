@@ -43,6 +43,9 @@ public class Orders {
 	private LocalDateTime orderDateTime;
 
 	@JsonProperty(access = Access.READ_ONLY)
+	private String orderStatus;
+
+	@JsonProperty(access = Access.READ_ONLY)
 	@ManyToOne
 	private Customer customer;
 

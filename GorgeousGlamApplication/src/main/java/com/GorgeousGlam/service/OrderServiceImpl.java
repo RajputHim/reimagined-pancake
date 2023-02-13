@@ -37,7 +37,8 @@ public class OrderServiceImpl implements IOrderService {
 		Customer customer = customerService.getCustomerDetailsById(customerId);
 		Cart cart = cartService.viewCartbyId(customerId);
 		orders.setCart(cart);
-		orders.setCustomer(customerService.getCustomerDetailsById(customerId));
+		orders.setCustomer(customer);
+		orders.setOrderStatus("Placed");
 
 		Map<Product, Integer> products = cart.getProducts();
 		if (products.isEmpty()) {
