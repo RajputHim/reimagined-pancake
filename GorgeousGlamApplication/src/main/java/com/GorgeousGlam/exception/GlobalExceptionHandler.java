@@ -36,6 +36,19 @@ public class GlobalExceptionHandler {
 
 	}
 
+	@ExceptionHandler(ShipmentException.class)
+	public ResponseEntity<MyErrorDetails> ShipmentExceptionHandler(ShipmentException se, WebRequest req) {
+
+		MyErrorDetails err = new MyErrorDetails();
+
+		err.setTimestamp(LocalDateTime.now());
+		err.setMessage(se.getMessage());
+		err.setDetails(req.getDescription(false));
+
+		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+
+	}
+
 	@ExceptionHandler(SessionException.class)
 	public ResponseEntity<MyErrorDetails> SessionExceptionHandler(SessionException se, WebRequest req) {
 

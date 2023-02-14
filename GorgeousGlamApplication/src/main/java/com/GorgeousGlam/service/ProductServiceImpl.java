@@ -113,7 +113,7 @@ public class ProductServiceImpl implements IProductService {
 		if (products.isEmpty()) {
 			throw new ProductNotFoundException("No product found between this price range..");
 		}
-		return null;
+		return products;
 	}
 
 //	@Override
