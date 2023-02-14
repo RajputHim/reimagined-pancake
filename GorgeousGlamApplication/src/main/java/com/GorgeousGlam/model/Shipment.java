@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Shipment {
@@ -15,8 +16,10 @@ public class Shipment {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int shipmentId;
 
+	@NotNull(message = "DeliveryFrom cannot be null")
 	private String deliveryFrom;
 
+	@NotNull
 	private LocalDate expectedDelivery;
 
 	@OneToOne
