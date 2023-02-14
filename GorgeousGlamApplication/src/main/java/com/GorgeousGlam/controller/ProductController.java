@@ -63,7 +63,7 @@ public class ProductController {
 
 	}
 
-	@GetMapping("/products/{pId}")
+	@GetMapping("/products/id/{pId}")
 	public ResponseEntity<Product> viewProductByIdHandler(@PathVariable("pId") Integer pId) {
 
 		Product product = productService.getProductById(pId);
@@ -108,7 +108,7 @@ public class ProductController {
 
 	}
 
-	@GetMapping("/products/{productType}")
+	@GetMapping("/products/type/{productType}")
 	public ResponseEntity<List<Product>> viewAllProductByProductTypeHandler(
 			@PathVariable("productType") String productType) {
 
