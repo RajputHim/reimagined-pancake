@@ -6,4 +6,6 @@ public interface IShipmentService {
 
 	public Shipment addShipment(Integer orderId);
 
+	public Shipment viewShipment(Integer shipmentId);
+
 }
