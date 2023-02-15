@@ -8,4 +8,6 @@ public interface IShipmentService {
 
 	public Shipment viewShipment(Integer shipmentId);
 
+	public Shipment deleteShipment(Integer shipmentId);
+
 }

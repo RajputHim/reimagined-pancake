@@ -3,6 +3,7 @@ package com.GorgeousGlam.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +64,26 @@ public class ShipmentController {
 		if (session.getUserId() == adminId && session.getUserType() == UserType.ADMIN) {
 
 			Shipment shipment = shipmentService.viewShipment(shipmentId);
+
+			return new ResponseEntity<>(shipment, HttpStatus.CREATED);
+
+		} else {
+			throw new SessionException("Please login with correct credentials");
+		}
+	}
+
+	@DeleteMapping(value = "/shipments/{adminId}/{shipmentId}")
+	public ResponseEntity<Shipment> deleteShipmentByIdHandler(@PathVariable("adminId") Integer adminId,
+			@PathVariable("shipmentId") Integer shipmentId, @RequestParam("sessionKey") String sessionKey)
+			throws SessionException, CustomerException {
+
+		Admin admin = adminService.getAdminDetailsById(adminId);
+
+		Session session = sessionService.getSessionByKey(sessionKey);
+
+		if (session.getUserId() == adminId && session.getUserType() == UserType.ADMIN) {
+
+			Shipment shipment = shipmentService.deleteShipment(shipmentId);
 
 			return new ResponseEntity<>(shipment, HttpStatus.CREATED);
 

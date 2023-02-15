@@ -47,4 +47,14 @@ public class ShipmentServiceImpl implements IShipmentService {
 		return shipment;
 	}
 
+	@Override
+	public Shipment deleteShipment(Integer shipmentId) {
+		Shipment shipment = shipmentRepo.findById(shipmentId)
+				.orElseThrow(() -> new ShipmentException("No shipment found by id: " + shipmentId));
+
+		shipmentRepo.delete(shipment);
+
+		return shipment;
+	}
+
 }
