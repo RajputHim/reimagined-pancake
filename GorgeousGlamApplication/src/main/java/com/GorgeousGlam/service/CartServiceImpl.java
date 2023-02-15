@@ -46,7 +46,16 @@ public class CartServiceImpl implements ICartService {
 				if (existingProduct.getProductQuantity() >= quantityOfProduct && quantityOfProduct != 0) {
 					Cart pCart = customer.getCart();
 
-					pCart.getProducts().put(existingProduct, quantityOfProduct);
+					Map<Product, Integer> productList = pCart.getProducts();
+
+					boolean isPresent = productList.containsKey(existingProduct);
+
+					if (isPresent) {
+						Integer qty = productList.get(existingProduct);
+						productList.put(existingProduct, qty + quantityOfProduct);
+					} else {
+						productList.put(existingProduct, quantityOfProduct);
+					}
 
 					cartRepo.save(pCart);
 					return customer.getCart();
@@ -123,33 +132,19 @@ public class CartServiceImpl implements ICartService {
 			Cart pCart = customer.getCart();
 
 			Map<Product, Integer> products = pCart.getProducts();
-			boolean updated = false;
-			Set<Product> productSet = products.keySet();
-			for (Product product : productSet) {
-				if (product.getProductId() == productId) {
 
-					Product productInStore = productRepo.findById(productId).orElseThrow(
-							() -> new ProductNotFoundException("Product not found in store by id: " + productId));
+			Product productInStore = productRepo.findById(productId)
+					.orElseThrow(() -> new ProductNotFoundException("Product not found in store by id: " + productId));
 
-					if (newQuantity <= productInStore.getProductQuantity() && newQuantity > 0) {
-						product.setProductQuantity(newQuantity);
-						updated = true;
+			if (newQuantity <= productInStore.getProductQuantity() && newQuantity > 0) {
 
-					} else {
-						throw new ProductNotFoundException(
-								"Minimum quantity should be 1 and maximum quantity should be "
-										+ productInStore.getProductQuantity());
-					}
-
-				}
-			}
-
-			if (updated) {
+				products.put(productInStore, newQuantity);
 
 				return cartRepo.save(pCart);
 
 			} else {
-				throw new ProductNotFoundException("No product found by id: " + productId);
+				throw new ProductNotFoundException("Minimum quantity should be 1 and maximum quantity should be "
+						+ productInStore.getProductQuantity());
 			}
 
 		} else {
