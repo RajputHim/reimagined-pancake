@@ -1,5 +1,6 @@
 package com.GorgeousGlam.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -39,14 +40,15 @@ public class Customer {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
-	@NotNull
-	@OneToOne(cascade = CascadeType.ALL)
-	private Address address;
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	private List<Address> address = new ArrayList<>();
 
 	@OneToOne(cascade = CascadeType.ALL)
+	@JsonProperty(access = Access.READ_ONLY)
 	private Cart cart = new Cart();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
+	@JsonProperty(access = Access.READ_ONLY)
 	private List<Orders> orders;
 
 	public Customer() {
@@ -92,11 +94,11 @@ public class Customer {
 		this.password = password;
 	}
 
-	public Address getAddress() {
+	public List<Address> getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(List<Address> address) {
 		this.address = address;
 	}
 
