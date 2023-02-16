@@ -13,7 +13,7 @@ public interface ICustomerService {
 
 	public Customer deleteCustomerById(Integer customerId) throws CustomerException;
 
-	public Customer updateCustomerDetails(Customer customer) throws CustomerException;
+	public Customer updateCustomerDetails(Customer customer, Integer addressId) throws CustomerException;
 
 	public List<Customer> getAllCustomers() throws CustomerException;
 }

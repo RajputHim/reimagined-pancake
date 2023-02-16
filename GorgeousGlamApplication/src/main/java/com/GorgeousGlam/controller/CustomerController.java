@@ -125,7 +125,7 @@ public class CustomerController {
 
 		if (session.getUserId() == userId && session.getUserType() == UserType.CUSTOMER) {
 
-			updatedCustomer = customerService.updateCustomerDetails(customer);
+//			updatedCustomer = customerService.updateCustomerDetails(customer);
 
 		}
 

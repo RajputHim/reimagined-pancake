@@ -70,12 +70,12 @@ public class OrderServiceImpl implements IOrderService {
 		OrdersDTO orderInfo = new OrdersDTO(saveOrder.getBookingOrderId(), saveOrder.getTransactionMode(), totalCost,
 				totalQt, saveOrder.getOrderDateTime(), customer.getName(), customer.getEmail());
 
-		Address address = customer.getAddress();
-
-		AddressDTO deliveryAddress = new AddressDTO(address.getHouseNo(), address.getColony(), address.getCity(),
-				address.getState(), address.getPinCode());
-
-		orderInfo.setAddress(deliveryAddress);
+//		Address address = customer.getAddress();
+//
+//		AddressDTO deliveryAddress = new AddressDTO(address.getHouseNo(), address.getColony(), address.getCity(),
+//				address.getState(), address.getPinCode());
+//
+//		orderInfo.setAddress(deliveryAddress);
 
 		orderInfo.setProducts(orderedProducts);
 

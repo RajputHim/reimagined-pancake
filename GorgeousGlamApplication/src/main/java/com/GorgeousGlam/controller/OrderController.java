@@ -62,7 +62,7 @@ public class OrderController {
 		}
 	}
 
-	@GetMapping("/orders/{userId}")
+	@GetMapping("/orders/id/{userId}")
 	public ResponseEntity<Orders> viewOrderByIdHandler(@PathVariable("userId") Integer userId,
 			@RequestParam("orderId") Integer orderId, @RequestParam("sessionKey") String sessionKey) {
 
