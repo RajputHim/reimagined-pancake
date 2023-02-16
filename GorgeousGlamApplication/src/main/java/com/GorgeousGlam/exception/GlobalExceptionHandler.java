@@ -36,6 +36,19 @@ public class GlobalExceptionHandler {
 
 	}
 
+	@ExceptionHandler(AddressException.class)
+	public ResponseEntity<MyErrorDetails> AddressExceptionHandler(AddressException ae, WebRequest req) {
+
+		MyErrorDetails err = new MyErrorDetails();
+
+		err.setTimestamp(LocalDateTime.now());
+		err.setMessage(ae.getMessage());
+		err.setDetails(req.getDescription(false));
+
+		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+
+	}
+
 	@ExceptionHandler(ShipmentException.class)
 	public ResponseEntity<MyErrorDetails> ShipmentExceptionHandler(ShipmentException se, WebRequest req) {
 

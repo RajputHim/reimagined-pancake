@@ -9,6 +9,7 @@ import com.GorgeousGlam.DTO.CustomerDTO;
 import com.GorgeousGlam.exception.CustomerException;
 import com.GorgeousGlam.model.Address;
 import com.GorgeousGlam.model.Customer;
+import com.GorgeousGlam.repository.AddressRepo;
 import com.GorgeousGlam.repository.CustomerRepo;
 
 @Service
@@ -16,6 +17,9 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	private CustomerRepo customerRepo;
+
+	@Autowired
+	private AddressRepo addressRepo;
 
 	@Override
 	public Customer addCustomer(CustomerDTO customer) throws CustomerException {
@@ -29,7 +33,7 @@ public class CustomerServiceImpl implements ICustomerService {
 		Address customerAddress = new Address(customer.getAddress().getHouseNo(), customer.getAddress().getColony(),
 				customer.getAddress().getCity(), customer.getAddress().getState(), customer.getAddress().getPinCode());
 
-		newCustomer.setAddress(customerAddress);
+		newCustomer.getAddress().add(customerAddress);
 
 		Customer savedCustomer = customerRepo.save(newCustomer);
 
@@ -53,7 +57,7 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 
 	@Override
-	public Customer updateCustomerDetails(Customer customer) throws CustomerException {
+	public Customer updateCustomerDetails(Customer customer, Integer addressId) throws CustomerException {
 		Customer existingCustomer = customerRepo.findById(customer.getCustomerId())
 				.orElseThrow(() -> new CustomerException("No customer found by id: " + customer.getCustomerId()));
 
@@ -69,33 +73,36 @@ public class CustomerServiceImpl implements ICustomerService {
 			existingCustomer.setPassword(customer.getPassword());
 		}
 
-		if (customer.getAddress() != null) {
-			Address newAddress = customer.getAddress();
-			Address oldAddress = existingCustomer.getAddress();
+//		addressRepo.findById(addressId).orElseThrow();
+//		
+//		List<Address> newAddress = customer.getAddress();
+//		if (customer.getAddress() != null) {
+//			Address oldAddress = existingCustomer.getAddress();
+//
+//			if (newAddress.getCity() != null) {
+//				oldAddress.setCity(newAddress.getCity());
+//			}
+//
+//			if (newAddress.getColony() != null) {
+//				oldAddress.setColony(newAddress.getColony());
+//			}
+//
+//			if (newAddress.getHouseNo() != null) {
+//				oldAddress.setHouseNo(newAddress.getHouseNo());
+//			}
+//
+//			if (newAddress.getState() != null) {
+//				oldAddress.setState(newAddress.getState());
+//			}
+//
+//			if (newAddress.getPinCode() != null) {
+//				oldAddress.setPinCode(newAddress.getPinCode());
+//			}
 
-			if (newAddress.getCity() != null) {
-				oldAddress.setCity(newAddress.getCity());
-			}
-
-			if (newAddress.getColony() != null) {
-				oldAddress.setColony(newAddress.getColony());
-			}
-
-			if (newAddress.getHouseNo() != null) {
-				oldAddress.setHouseNo(newAddress.getHouseNo());
-			}
-
-			if (newAddress.getState() != null) {
-				oldAddress.setState(newAddress.getState());
-			}
-
-			if (newAddress.getPinCode() != null) {
-				oldAddress.setPinCode(newAddress.getPinCode());
-			}
-
-		}
+//		}
 
 		return customerRepo.save(existingCustomer);
+
 	}
 
 	@Override

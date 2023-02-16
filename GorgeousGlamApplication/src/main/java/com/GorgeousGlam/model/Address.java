@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -37,7 +38,7 @@ public class Address {
 	@NotNull(message = "Pincode cannot be null")
 	private Integer pinCode;
 
-	@OneToOne(mappedBy = "address", cascade = CascadeType.ALL)
+	@ManyToOne
 	@JsonIgnore
 	private Customer customer;
 
