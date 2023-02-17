@@ -74,7 +74,7 @@ public class ProductController {
 
 	@DeleteMapping("/products/{pId}/{adminId}")
 	public ResponseEntity<Product> deleteProductByIdHandler(@PathVariable("pId") Integer pId,
-			@PathVariable("adminId") Integer adminId, @PathVariable("sessionKey") String sessionKey) {
+			@PathVariable("adminId") Integer adminId, @RequestParam("sessionKey") String sessionKey) {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 
