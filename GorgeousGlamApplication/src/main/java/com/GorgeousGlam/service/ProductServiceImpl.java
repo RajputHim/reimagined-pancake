@@ -43,7 +43,9 @@ public class ProductServiceImpl implements IProductService {
 			}
 		}
 
-		return savedProducts;
+		List<Product> allProducts = productRepo.findAll();
+
+		return allProducts;
 
 	}
 
