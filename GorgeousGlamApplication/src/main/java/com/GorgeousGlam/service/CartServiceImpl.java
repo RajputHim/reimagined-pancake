@@ -52,7 +52,15 @@ public class CartServiceImpl implements ICartService {
 
 					if (isPresent) {
 						Integer qty = productList.get(existingProduct);
+
+						Integer stock = existingProduct.getProductQuantity();
+
+						if (qty + quantityOfProduct > stock || quantityOfProduct == 0) {
+							throw new ProductNotFoundException(
+									"Minimum quantity should be 1 and maximum quantity should be " + stock);
+						}
 						productList.put(existingProduct, qty + quantityOfProduct);
+
 					} else {
 						productList.put(existingProduct, quantityOfProduct);
 					}
@@ -97,24 +105,18 @@ public class CartServiceImpl implements ICartService {
 			Cart pCart = customer.getCart();
 
 			Map<Product, Integer> products = pCart.getProducts();
-			boolean removed = false;
 
 			Set<Product> productSet = products.keySet();
 
 			for (Product product : productSet) {
 				if (product.getProductId() == productId) {
 					products.remove(product);
-					removed = true;
+					return cartRepo.save(pCart);
+
 				}
 			}
 
-			if (removed) {
-
-				return cartRepo.save(pCart);
-
-			} else {
-				throw new ProductNotFoundException("No product found by id: " + productId);
-			}
+			throw new ProductNotFoundException("No product found by id: " + productId);
 
 		} else {
 			throw new CustomerException("No customer found by id:" + customerId);
