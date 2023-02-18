@@ -1,5 +1,7 @@
 package com.GorgeousGlam.service;
 
+import javax.security.auth.login.LoginException;
+
 import com.GorgeousGlam.DTO.AdminDTO;
 import com.GorgeousGlam.exception.AdminException;
 import com.GorgeousGlam.model.Admin;
@@ -12,6 +14,6 @@ public interface IAdminService {
 
 	public Admin updateAdminDetails(Admin admin) throws AdminException;
 
-	public Admin deleteAdminById(Integer aId) throws AdminException;
+	public Admin deleteAdminById(Integer aId) throws AdminException, LoginException;
 
 }
