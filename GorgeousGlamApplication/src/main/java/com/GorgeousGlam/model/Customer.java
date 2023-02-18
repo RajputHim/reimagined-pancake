@@ -18,6 +18,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -40,16 +41,18 @@ public class Customer {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
+	@JsonProperty(access = Access.READ_ONLY)
 	private List<Address> address = new ArrayList<>();
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JsonProperty(access = Access.READ_ONLY)
 	private Cart cart = new Cart();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
 	@JsonProperty(access = Access.READ_ONLY)
-	private List<Orders> orders;
+//	@JsonIgnore
+	private List<Orders> orders = new ArrayList<>();
 
 	public Customer() {
 		// TODO Auto-generated constructor stub

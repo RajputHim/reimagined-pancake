@@ -25,6 +25,7 @@ public class Admin {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@JsonProperty(access = Access.READ_ONLY)
 	private Integer adminId;
 
 	@NotNull(message = "Admin name cannot be null")
