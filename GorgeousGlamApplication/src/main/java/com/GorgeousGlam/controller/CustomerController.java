@@ -2,6 +2,7 @@ package com.GorgeousGlam.controller;
 
 import java.util.List;
 
+import javax.security.auth.login.LoginException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.GorgeousGlam.DTO.CustomerDTO;
+import com.GorgeousGlam.exception.CustomerException;
 import com.GorgeousGlam.exception.SessionException;
+import com.GorgeousGlam.model.Address;
 import com.GorgeousGlam.model.Customer;
 import com.GorgeousGlam.model.Session;
 import com.GorgeousGlam.model.UserType;
@@ -42,8 +45,30 @@ public class CustomerController {
 
 	}
 
-	@GetMapping("/customers/{userId}")
-	public ResponseEntity<Customer> getCustomerByIdHandler(@PathVariable("userId") Integer userId,
+	@PostMapping("/customers/addresses/{customerId}")
+	public ResponseEntity<Customer> addCustomerAddressHandler(@Valid @RequestBody Address address,
+			@PathVariable("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey) {
+
+		Session session = sessionService.getSessionByKey(sessionKey);
+
+		if (session == null) {
+			throw new SessionException("Please login with the correct credentials");
+		}
+
+		Customer savedCustomer = null;
+
+		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
+
+			savedCustomer = customerService.addAddress(address, customerId);
+
+		}
+
+		return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+
+	}
+
+	@GetMapping("/customers")
+	public ResponseEntity<Customer> getCustomerByIdHandler(@RequestParam("customerId") Integer customerId,
 			@RequestParam("sessionKey") String sessionKey) {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
@@ -54,10 +79,9 @@ public class CustomerController {
 
 		Customer customer = null;
 
-		if (session.getUserId() == userId
-				&& (session.getUserType() == UserType.ADMIN || session.getUserType() == UserType.CUSTOMER)) {
+		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			customer = customerService.getCustomerDetailsById(userId);
+			customer = customerService.getCustomerDetailsById(customerId);
 
 		}
 
@@ -90,7 +114,7 @@ public class CustomerController {
 
 	@DeleteMapping("/customers/{userId}")
 	public ResponseEntity<Customer> deleteCustomerByIdHandler(@PathVariable("userId") Integer userId,
-			@RequestParam("sessionKey") String sessionKey) {
+			@RequestParam("sessionKey") String sessionKey) throws CustomerException, LoginException {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 
@@ -111,9 +135,10 @@ public class CustomerController {
 
 	}
 
-	@PatchMapping("/customers/{userId}")
-	public ResponseEntity<Customer> updateCustomerDetailsHandler(@PathVariable("userId") Integer userId,
-			@RequestParam("sessionKey") String sessionKey, @RequestBody Customer customer) {
+	@DeleteMapping("/customers/addresses/{customerId}/{addressId}")
+	public ResponseEntity<Customer> deleteAddressByIdHandler(@PathVariable("customerId") Integer customerId,
+			@PathVariable("addressId") Integer addressId, @RequestParam("sessionKey") String sessionKey)
+			throws CustomerException, LoginException {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 
@@ -123,9 +148,32 @@ public class CustomerController {
 
 		Customer updatedCustomer = null;
 
-		if (session.getUserId() == userId && session.getUserType() == UserType.CUSTOMER) {
+		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-//			updatedCustomer = customerService.updateCustomerDetails(customer);
+			updatedCustomer = customerService.deleteAddress(addressId, customerId);
+
+		}
+
+		return new ResponseEntity<>(updatedCustomer, HttpStatus.ACCEPTED);
+
+	}
+
+	@PatchMapping("/customers/{userId}/{addressId}")
+	public ResponseEntity<Customer> updateCustomerDetailsHandler(@PathVariable("addressId") Integer addressId,
+			@PathVariable("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey,
+			@Valid @RequestBody CustomerDTO customer) {
+
+		Session session = sessionService.getSessionByKey(sessionKey);
+
+		if (session == null) {
+			throw new SessionException("Please login with the correct credentials");
+		}
+
+		Customer updatedCustomer = null;
+
+		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
+
+			updatedCustomer = customerService.updateCustomerDetails(customer, addressId, customerId);
 
 		}
 

@@ -1,5 +1,7 @@
 package com.GorgeousGlam.model;
 
+import java.util.Objects;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,10 +15,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @Entity
 public class Address {
 	@Id
@@ -28,7 +26,7 @@ public class Address {
 	private String houseNo;
 
 	private String colony;
-	
+
 	@NotNull(message = "City name cannot be null")
 	private String city;
 
@@ -38,21 +36,39 @@ public class Address {
 	@NotNull(message = "Pincode cannot be null")
 	private Integer pinCode;
 
+//	@JsonIgnore
+//	private boolean primary;
+
 	@ManyToOne
 	@JsonIgnore
 	private Customer customer;
+
+//	@JsonIgnore
+//	@OneToOne
+//	private Orders order;
 
 	public Address() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Address(String houseNo, String colony, String city, String state, Integer pinCode) {
+	public Address(@NotNull(message = "House number cannot be null") String houseNo, String colony,
+			@NotNull(message = "City name cannot be null") String city,
+			@NotNull(message = "State name cannot be null") String state,
+			@NotNull(message = "Pincode cannot be null") Integer pinCode) {
 		super();
 		this.houseNo = houseNo;
 		this.colony = colony;
 		this.city = city;
 		this.state = state;
 		this.pinCode = pinCode;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	public Integer getAddressId() {
@@ -103,12 +119,23 @@ public class Address {
 		this.pinCode = pinCode;
 	}
 
-	public Customer getCustomer() {
-		return customer;
+	@Override
+	public int hashCode() {
+		return Objects.hash(city, colony, houseNo, pinCode, state);
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		return Objects.equals(city, other.city) && Objects.equals(colony, other.colony)
+				&& Objects.equals(houseNo, other.houseNo) && Objects.equals(pinCode, other.pinCode)
+				&& Objects.equals(state, other.state);
 	}
 
 }

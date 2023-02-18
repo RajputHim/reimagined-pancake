@@ -1,5 +1,6 @@
 package com.GorgeousGlam.controller;
 
+import javax.security.auth.login.LoginException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class AdminController {
 
 	@DeleteMapping("/admins/{aId}")
 	public ResponseEntity<Admin> deleteAdminByIdHandler(@PathVariable("aId") Integer aId,
-			@RequestParam("sessionKey") String sessionKey) {
+			@RequestParam("sessionKey") String sessionKey) throws AdminException, LoginException {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 
@@ -62,9 +63,9 @@ public class AdminController {
 
 	}
 
-	@PatchMapping("/admins/{aId}")
-	public ResponseEntity<Admin> updateAdminDetailsHandler(@PathVariable("aId") Integer aId,
-			@RequestParam("sessionKey") String sessionKey, @RequestBody Admin admin) {
+	@PatchMapping("/admins")
+	public ResponseEntity<Admin> updateAdminDetailsHandler(@RequestParam("sessionKey") String sessionKey,
+			@Valid @RequestBody Admin admin) {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 
@@ -72,7 +73,7 @@ public class AdminController {
 			throw new SessionException("Please login first..");
 		}
 
-		if (session.getUserId() == aId && (session.getUserType() == UserType.ADMIN)) {
+		if (session.getUserId() == admin.getAdminId() && (session.getUserType() == UserType.ADMIN)) {
 
 			Admin updatedAdmin = adminService.updateAdminDetails(admin);
 

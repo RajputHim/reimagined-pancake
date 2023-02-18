@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ public class Cart {
 	@JsonProperty(access = Access.READ_ONLY)
 	private Integer cartId;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	private Map<Product, Integer> products = new HashMap<>();
 
 }

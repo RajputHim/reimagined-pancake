@@ -32,54 +32,39 @@ public class OrderServiceImpl implements IOrderService {
 	private ICustomerService customerService;
 
 	@Override
-	public OrdersDTO addOrder(Orders orders, Integer customerId) throws OrderException {
+	public Orders addOrder(Orders orders, Integer customerId) throws OrderException {
 
 		Customer customer = customerService.getCustomerDetailsById(customerId);
-		Cart cart = cartService.viewCartbyId(customerId);
-		orders.setCart(cart);
-		orders.setCustomer(customer);
-		orders.setOrderStatus("Placed");
+
+		Cart cart = customer.getCart();
 
 		Map<Product, Integer> products = cart.getProducts();
+
 		if (products.isEmpty()) {
 			throw new ProductNotFoundException("No product found in cart..");
 		}
+
+		orders.setProducts(products);
+
+		orders.setCustomer(customer);
+		orders.setOrderStatus("Placed");
+
 		double totalCost = 0;
 		int totalQt = 0;
 
 		Set<Product> productSet = products.keySet();
 		for (Product product : productSet) {
-			totalCost += product.getProductPrice() * product.getProductQuantity();
-			totalQt += product.getProductQuantity();
+			totalCost += product.getProductPrice() * products.get(product);
+			totalQt += products.get(product);
 		}
 
 		orders.setTotalQuantity(totalQt);
 		orders.setTotalCost(totalCost);
-
 		orders.setOrderDateTime(LocalDateTime.now());
 
-		Orders saveOrder = orderRepo.save(orders);
+		cartService.emptyCart(customer.getCart().getCartId());
 
-		if (saveOrder == null) {
-			throw new OrderException("Please first add product to the Order...");
-		}
-
-		Map<Product, Integer> orderedProducts = cartService
-				.emptyCart(customerService.getCustomerDetailsById(customerId).getCart().getCartId());
-
-		OrdersDTO orderInfo = new OrdersDTO(saveOrder.getBookingOrderId(), saveOrder.getTransactionMode(), totalCost,
-				totalQt, saveOrder.getOrderDateTime(), customer.getName(), customer.getEmail());
-
-//		Address address = customer.getAddress();
-//
-//		AddressDTO deliveryAddress = new AddressDTO(address.getHouseNo(), address.getColony(), address.getCity(),
-//				address.getState(), address.getPinCode());
-//
-//		orderInfo.setAddress(deliveryAddress);
-
-		orderInfo.setProducts(orderedProducts);
-
-		return orderInfo;
+		return orderRepo.save(orders);
 
 	}
 

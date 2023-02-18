@@ -1,5 +1,7 @@
 package com.GorgeousGlam.service;
 
+import javax.security.auth.login.LoginException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,9 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Autowired
 	private AdminRepo adminRepo;
+
+	@Autowired
+	private ILoginService loginService;
 
 	@Override
 	public Admin addAdmin(AdminDTO admin) throws AdminException {
@@ -71,11 +76,14 @@ public class AdminServiceImpl implements IAdminService {
 	}
 
 	@Override
-	public Admin deleteAdminById(Integer aId) throws AdminException {
+	public Admin deleteAdminById(Integer aId) throws AdminException, LoginException {
 
 		Admin admin = adminRepo.findById(aId).orElseThrow(() -> new AdminException("No admin found by id: " + aId));
 
+		loginService.logout(aId);
+
 		adminRepo.delete(admin);
+
 		return admin;
 
 	}

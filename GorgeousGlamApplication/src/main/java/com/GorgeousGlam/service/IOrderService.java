@@ -8,7 +8,7 @@ import com.GorgeousGlam.model.Orders;
 
 public interface IOrderService {
 
-	public OrdersDTO addOrder(Orders orders, Integer customerId) throws OrderException;
+	public Orders addOrder(Orders orders, Integer customerId) throws OrderException;
 
 	public List<Orders> viewAllOrders() throws OrderException;
 
