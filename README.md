@@ -21,6 +21,11 @@ whereas Customer can buy products and track their order delivery status.
 - Generated session key while login.
 - Stored the session key in MySQL and later used it for Authentication.
 
+# ER Diagram
+![ER Diagram](https://user-images.githubusercontent.com/105914405/219878566-ff2a2085-3e45-4699-b6b2-2c00b8550e39.png)
+
+
+
 # Modules
 - Admin Module
 - Customer Module
