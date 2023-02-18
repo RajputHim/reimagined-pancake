@@ -1,9 +1,13 @@
 package com.GorgeousGlam.model;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
+import com.GorgeousGlam.DTO.AddressDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -45,14 +50,16 @@ public class Orders {
 	@JsonProperty(access = Access.READ_ONLY)
 	private String orderStatus;
 
-	@JsonProperty(access = Access.READ_ONLY)
+//	@JsonProperty(access = Access.READ_ONLY)
 	@ManyToOne
+	@JsonIgnore
 	private Customer customer;
 
-	@OneToOne
-//	@JsonIgnore
-//	@JsonProperty(access = Access.READ_ONLY)
-	@JsonIgnore
-	private Cart cart;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Address deliveryAddress;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@JsonProperty(access = Access.READ_ONLY)
+	private Map<Product, Integer> products = new HashMap<>();
 
 }

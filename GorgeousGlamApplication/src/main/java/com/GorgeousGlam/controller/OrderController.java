@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.GorgeousGlam.DTO.OrdersDTO;
 import com.GorgeousGlam.exception.CustomerException;
 import com.GorgeousGlam.exception.SessionException;
 import com.GorgeousGlam.model.Orders;
@@ -46,16 +45,16 @@ public class OrderController {
 	private ICartService cartService;
 
 	@PostMapping(value = "/orders/{customerId}")
-	public ResponseEntity<OrdersDTO> addOrdersHandler(@Valid @RequestBody Orders order,
+	public ResponseEntity<Orders> addOrdersHandler(@Valid @RequestBody Orders order,
 			@PathVariable("customerId") Integer customerId, @RequestParam("sessionKey") String sessionKey)
 			throws SessionException, CustomerException {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			OrdersDTO placedOrder = orderService.addOrder(order, customerId);
+			Orders placedOrder = orderService.addOrder(order, customerId);
 
-			return new ResponseEntity<OrdersDTO>(placedOrder, HttpStatus.CREATED);
+			return new ResponseEntity<Orders>(placedOrder, HttpStatus.CREATED);
 
 		} else {
 			throw new SessionException("Please login with correct credentials");
