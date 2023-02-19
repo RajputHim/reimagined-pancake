@@ -36,16 +36,9 @@ public class Address {
 	@NotNull(message = "Pincode cannot be null")
 	private Integer pinCode;
 
-//	@JsonIgnore
-//	private boolean primary;
-
 	@ManyToOne
 	@JsonIgnore
 	private Customer customer;
-
-//	@JsonIgnore
-//	@OneToOne
-//	private Orders order;
 
 	public Address() {
 		// TODO Auto-generated constructor stub

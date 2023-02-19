@@ -78,14 +78,31 @@ public class OrderController {
 
 	}
 
-	@GetMapping("/orders/{customerId}")
-	public ResponseEntity<List<Orders>> viewAllOrderHandler(@PathVariable("customerId") Integer customerId,
+	@GetMapping("/orders/customers/{customerId}")
+	public ResponseEntity<List<Orders>> viewAllOrderByCustomerHandler(@PathVariable("customerId") Integer customerId,
 			@RequestParam("sessionKey") String sessionKey) {
 
 		Session session = sessionService.getSessionByKey(sessionKey);
 		if (session.getUserId() == customerId && session.getUserType() == UserType.CUSTOMER) {
 
-			List<Orders> allOrders = orderService.viewAllOrders();
+			List<Orders> allOrders = orderService.viewAllOrdersByCustomer(customerId);
+
+			return new ResponseEntity<List<Orders>>(allOrders, HttpStatus.OK);
+
+		} else {
+			throw new SessionException("Please login with correct credentials");
+		}
+
+	}
+
+	@GetMapping("/orders/{adminId}")
+	public ResponseEntity<List<Orders>> viewAllOrderHandler(@PathVariable("adminId") Integer adminId,
+			@RequestParam("sessionKey") String sessionKey) {
+
+		Session session = sessionService.getSessionByKey(sessionKey);
+		if (session.getUserId() == adminId && session.getUserType() == UserType.ADMIN) {
+
+			List<Orders> allOrders = orderService.viewAllOrdersByCustomer(adminId);
 
 			return new ResponseEntity<List<Orders>>(allOrders, HttpStatus.OK);
 

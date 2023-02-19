@@ -34,6 +34,10 @@ public class CartServiceImpl implements ICartService {
 	public Cart addProductToCart(Integer productId, Integer customerId, Integer quantityOfProduct)
 			throws ProductNotFoundException, CustomerException {
 
+		/*
+		 * This method will add the product into the cart by fetching product with id
+		 * and return the updated cart
+		 */
 		Customer customer = customerService.getCustomerDetailsById(customerId);
 
 		if (customer != null) {
@@ -85,8 +89,13 @@ public class CartServiceImpl implements ICartService {
 
 	@Override
 	public Cart viewCartbyId(Integer customerId) throws CustomerException, CartException {
-		Customer customer = customerService.getCustomerDetailsById(customerId);
 
+		/*
+		 * This method will take customer id as input and then fetch customer details
+		 * and return the cart details from the customer details.
+		 */
+
+		Customer customer = customerService.getCustomerDetailsById(customerId);
 		if (customer != null) {
 			int cartId = customerService.getCustomerDetailsById(customerId).getCart().getCartId();
 			return cartRepo.findById(cartId).orElseThrow(() -> new CartException("No cart found by id: " + cartId));
@@ -99,6 +108,12 @@ public class CartServiceImpl implements ICartService {
 	@Override
 	public Cart deleteProductFromCart(Integer productId, Integer customerId)
 			throws ProductNotFoundException, CustomerException {
+
+		/*
+		 * This method will fetch customer and product details through respective id's.
+		 * Then it will add product into the cart which will be fetched from customer
+		 * details.
+		 */
 		Customer customer = customerService.getCustomerDetailsById(customerId);
 
 		if (customer != null) {
@@ -127,6 +142,12 @@ public class CartServiceImpl implements ICartService {
 	@Override
 	public Cart changeProductQuantity(Integer productId, Integer customerId, Integer newQuantity)
 			throws ProductNotFoundException, CustomerException {
+
+		/*
+		 * This method will fetch the customer details through id. Then find the product
+		 * from the cart which will be fetched from customer details. Then update the
+		 * old quantity with new quantity.
+		 */
 
 		Customer customer = customerService.getCustomerDetailsById(customerId);
 
@@ -157,7 +178,11 @@ public class CartServiceImpl implements ICartService {
 
 	@Override
 	public Map<Product, Integer> emptyCart(Integer cartId) throws CartException {
-
+		
+		/*
+		 * This method will empty the cart by fetching cart details through the cart id.
+		 */		
+		
 		Cart cart = cartRepo.findById(cartId).orElseThrow(() -> new CartException("No cart found by id: " + cartId));
 
 		Map<Product, Integer> products = cart.getProducts();

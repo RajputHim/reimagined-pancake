@@ -22,6 +22,12 @@ public class AdminServiceImpl implements IAdminService {
 	@Override
 	public Admin addAdmin(AdminDTO admin) throws AdminException {
 
+		/*
+		 * This method will add admin data to database after checking with E-mail, if
+		 * the data is already present in the database or not, and return the admin
+		 * details.
+		 */
+
 		Admin existingAdmin = adminRepo.findByEmail(admin.getEmail());
 
 		if (existingAdmin != null) {
@@ -50,11 +56,21 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Override
 	public Admin getAdminDetailsById(Integer aId) throws AdminException {
+
+		/* This method will return admin details found by admin id */
+
 		return adminRepo.findById(aId).orElseThrow(() -> new AdminException("No admin found by id: " + aId));
 	}
 
 	@Override
 	public Admin updateAdminDetails(Admin admin) throws AdminException {
+
+		/*
+		 * This method will take new admin details from the parameter and update the new
+		 * details into the database by fetching admin through id and return the updated
+		 * admin details.
+		 */
+
 		Admin existingAdmin = adminRepo.findById(admin.getAdminId())
 				.orElseThrow(() -> new AdminException("No admin found by id: " + admin.getAdminId()));
 
@@ -77,6 +93,11 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Override
 	public Admin deleteAdminById(Integer aId) throws AdminException, LoginException {
+
+		/*
+		 * This method will delete admin details from the database by fetching admin
+		 * through id, and return the details of deleted admin.
+		 */
 
 		Admin admin = adminRepo.findById(aId).orElseThrow(() -> new AdminException("No admin found by id: " + aId));
 

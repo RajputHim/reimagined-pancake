@@ -15,6 +15,11 @@ public class SessionServiceImpl implements ISessionService {
 
 	@Override
 	public Session getSessionByKey(String key) throws SessionException {
+
+		/*
+		 * This method will return the current session details by fetching the data
+		 * through session key.
+		 */
 		Session currentSession = sessionRepo.findBySessionKey(key);
 		if (currentSession == null)
 			throw new SessionException("No session fouund with session key: " + key);

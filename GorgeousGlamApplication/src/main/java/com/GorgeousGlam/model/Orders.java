@@ -50,7 +50,6 @@ public class Orders {
 	@JsonProperty(access = Access.READ_ONLY)
 	private String orderStatus;
 
-//	@JsonProperty(access = Access.READ_ONLY)
 	@ManyToOne
 	@JsonIgnore
 	private Customer customer;
