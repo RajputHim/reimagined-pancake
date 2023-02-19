@@ -19,6 +19,12 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public List<Product> addProduct(List<Product> products) {
+
+		/*
+		 * This method will add the products into the database, and the return the
+		 * updated product list.
+		 */
+
 		List<Product> savedProducts = new ArrayList<>();
 		boolean saved = false;
 		for (Product product : products) {
@@ -51,6 +57,12 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public Product getProductById(Integer pId) throws ProductNotFoundException {
+
+		/*
+		 * This method will return the product data by fetching the data from database
+		 * through product id.
+		 */
+
 		Optional<Product> productOpt = productRepo.findById(pId);
 
 		if (productOpt.isEmpty()) {
@@ -62,6 +74,12 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public Product deleteProductById(Integer pId) throws ProductNotFoundException {
+
+		/*
+		 * This method will delete the product data by fetching the data from database
+		 * through product id, and return the delete product details.
+		 */
+
 		Optional<Product> productOpt = productRepo.findById(pId);
 
 		if (productOpt.isEmpty()) {
@@ -75,6 +93,11 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public List<Product> getAllProduct() throws ProductNotFoundException {
+
+		/*
+		 * This method will return the list of products data.
+		 */
+
 		List<Product> allProducts = productRepo.findAll();
 		if (allProducts.isEmpty()) {
 			throw new ProductNotFoundException("No products found..");
@@ -86,6 +109,11 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public List<Product> getAllProductByCategory(String category) throws ProductNotFoundException {
+
+		/*
+		 * This method will fetch and return the list of products belonging to
+		 * particular category.
+		 */
 
 		List<Product> products = productRepo.findByCategory(category);
 
@@ -99,6 +127,11 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public List<Product> getAllProductByProductType(String productType) throws ProductNotFoundException {
 
+		/*
+		 * This method will return all the products by fetching the details through
+		 * product type.
+		 */
+
 		List<Product> products = productRepo.findByProductType(productType);
 
 		if (products.isEmpty()) {
@@ -110,6 +143,10 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public List<Product> getAllProductByPriceRange(Double startPrice, Double endPrice) throws ProductNotFoundException {
 
+		/*
+		 * This method will return all the products between the a price range.
+		 */
+
 		List<Product> products = productRepo.findByProductPriceBetween(startPrice, endPrice);
 
 		if (products.isEmpty()) {
@@ -117,16 +154,5 @@ public class ProductServiceImpl implements IProductService {
 		}
 		return products;
 	}
-
-//	@Override
-//	public List<Product> addMultipleProducts(List<Product> products) {
-//		List<Product> savedProducts = productRepo.saveAll(products);
-//
-//		if (savedProducts.isEmpty()) {
-//			throw new ProductNotFoundException("Products not saved..");
-//		}
-//
-//		return savedProducts;
-//	}
 
 }

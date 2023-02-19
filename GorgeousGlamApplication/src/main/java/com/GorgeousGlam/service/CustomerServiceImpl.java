@@ -31,6 +31,11 @@ public class CustomerServiceImpl implements ICustomerService {
 	@Override
 	public Customer addCustomer(CustomerDTO customer) throws CustomerException {
 
+		/*
+		 * This method will check if the customer details is present into the database
+		 * or not, then it will save data or throw exception.
+		 */
+
 		if (customerRepo.findByEmail(customer.getEmail()) != null) {
 			throw new CustomerException("Customer already exists with email: " + customer.getEmail());
 		}
@@ -52,12 +57,23 @@ public class CustomerServiceImpl implements ICustomerService {
 	@Override
 	public Customer getCustomerDetailsById(Integer customerId) throws CustomerException {
 
+		/*
+		 * This method will return the customer details by fetching the data from
+		 * database through id.
+		 */
+
 		return customerRepo.findById(customerId)
 				.orElseThrow(() -> new CustomerException("No customer found by id: " + customerId));
 	}
 
 	@Override
 	public Customer deleteCustomerById(Integer customerId) throws CustomerException, LoginException {
+
+		/*
+		 * This method will delete the customer data through customer id. And also
+		 * delete the login session.
+		 */
+
 		Customer customer = customerRepo.findById(customerId)
 				.orElseThrow(() -> new CustomerException("No customer found by id: " + customerId));
 
@@ -70,6 +86,12 @@ public class CustomerServiceImpl implements ICustomerService {
 	@Override
 	public Customer updateCustomerDetails(CustomerDTO customer, Integer addressId, Integer customerId)
 			throws CustomerException {
+
+		/*
+		 * This method will replace the old customer data with the new data and the
+		 * return the updated customer details.
+		 */
+
 		Customer existingCustomer = customerRepo.findById(customerId)
 				.orElseThrow(() -> new CustomerException("No customer found by id: " + customerId));
 
@@ -101,6 +123,10 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public List<Customer> getAllCustomers() throws CustomerException {
+
+		/*
+		 * This method will return all the registered customers from the database.
+		 */
 		List<Customer> allCustomers = customerRepo.findAll();
 
 		if (allCustomers.isEmpty()) {
@@ -112,6 +138,11 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public Customer addAddress(Address address, Integer customerId) throws AddressException {
+
+		/*
+		 * This method will fetch customer data through id and then it will add new
+		 * address into the address list of customer.
+		 */
 
 		Customer customer = customerRepo.findById(customerId)
 				.orElseThrow(() -> new CustomerException("No customer found by id: " + customerId));
@@ -126,6 +157,12 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public Customer deleteAddress(Integer addressId, Integer customerId) throws AddressException {
+
+		/*
+		 * This method will delete the customer address by fetching the customer details
+		 * through id, and return the updated customer data.
+		 */
+
 		Customer customer = customerRepo.findById(customerId)
 				.orElseThrow(() -> new CustomerException("No customer found by id: " + customerId));
 

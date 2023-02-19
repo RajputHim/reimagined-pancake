@@ -9,8 +9,6 @@ public interface IProductService {
 
 	public List<Product> addProduct(List<Product> products);
 
-//	public List<Product> addMultipleProducts(List<Product> products);
-
 	public Product deleteProductById(Integer pId) throws ProductNotFoundException;
 
 	public Product getProductById(Integer pId) throws ProductNotFoundException;

@@ -36,6 +36,11 @@ public class LoginServiceImpl implements ILoginService {
 	@Override
 	public Session login(LoginDTO loginDto) throws LoginException, AdminException {
 
+		/*
+		 * This method will login the user by fetching registered user data through
+		 * E-mail and create unique session key, and return the session details.
+		 */
+
 		Session currSession = null;
 
 		if (loginDto.getUserType() == UserType.ADMIN) {
@@ -104,6 +109,12 @@ public class LoginServiceImpl implements ILoginService {
 
 	@Override
 	public String logout(Integer userId) throws LoginException {
+
+		/*
+		 * This method will logout the user by fetching session data through user id and
+		 * delete session from database.
+		 */
+
 		Session session = sessionRepo.findById(userId)
 				.orElseThrow(() -> new LoginException("No user is logged in with userId: " + userId));
 		sessionRepo.delete(session);
