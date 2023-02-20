@@ -52,6 +52,13 @@ public class OrderServiceImpl implements IOrderService {
 		orders.setCustomer(customer);
 		orders.setOrderStatus("Placed");
 
+		customer.getAddress().forEach(address -> {
+			if (address.equals(orders.getDeliveryAddress())) {
+				address.setOrder(orders);
+				orders.setDeliveryAddress(address);
+			}
+		});
+
 		double totalCost = 0;
 		int totalQt = 0;
 
@@ -79,13 +86,15 @@ public class OrderServiceImpl implements IOrderService {
 		 * database which was placed by the customer.
 		 */
 
-//		List<Orders> allOrders = orderRepo.getAllOrders(customerId);
-//
-//		if (allOrders.isEmpty())
-//			throw new OrderException("No order found...");
-//
-//		return allOrders;
-		return null;
+		Customer customer = customerService.getCustomerDetailsById(customerId);
+
+		List<Orders> allOrders = customer.getOrders();
+
+		if (allOrders.isEmpty())
+			throw new OrderException("No order found...");
+
+		return allOrders;
+
 	}
 
 	@Override
