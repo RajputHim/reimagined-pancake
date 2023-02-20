@@ -39,6 +39,10 @@ public class Address {
 	@ManyToOne
 	@JsonIgnore
 	private Customer customer;
+	
+	@OneToOne(cascade = CascadeType.ALL ,mappedBy = "deliveryAddress")
+	@JsonIgnore
+	private Orders order;
 
 	public Address() {
 		// TODO Auto-generated constructor stub
@@ -110,6 +114,15 @@ public class Address {
 
 	public void setPinCode(Integer pinCode) {
 		this.pinCode = pinCode;
+	}
+
+	
+	public Orders getOrder() {
+		return order;
+	}
+
+	public void setOrder(Orders order) {
+		this.order = order;
 	}
 
 	@Override

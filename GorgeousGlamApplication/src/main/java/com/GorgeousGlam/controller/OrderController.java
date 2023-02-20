@@ -102,7 +102,7 @@ public class OrderController {
 		Session session = sessionService.getSessionByKey(sessionKey);
 		if (session.getUserId() == adminId && session.getUserType() == UserType.ADMIN) {
 
-			List<Orders> allOrders = orderService.viewAllOrdersByCustomer(adminId);
+			List<Orders> allOrders = orderService.viewAllOrders();
 
 			return new ResponseEntity<List<Orders>>(allOrders, HttpStatus.OK);
 

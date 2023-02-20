@@ -51,7 +51,6 @@ public class Customer {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
 	@JsonProperty(access = Access.READ_ONLY)
-//	@JsonIgnore
 	private List<Orders> orders = new ArrayList<>();
 
 	public Customer() {
@@ -79,6 +78,14 @@ public class Customer {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Orders> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Orders> orders) {
+		this.orders = orders;
 	}
 
 	public String getEmail() {

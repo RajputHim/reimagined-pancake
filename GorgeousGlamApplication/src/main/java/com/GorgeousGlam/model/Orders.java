@@ -61,4 +61,5 @@ public class Orders {
 	@JsonProperty(access = Access.READ_ONLY)
 	private Map<Product, Integer> products = new HashMap<>();
 
+	
 }
