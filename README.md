@@ -22,7 +22,7 @@ whereas Customer can buy products and track their order delivery status.
 - Stored the session key in MySQL and later used it for Authentication.
 
 # ER Diagram
-![ER Diagram](https://user-images.githubusercontent.com/105914405/219878566-ff2a2085-3e45-4699-b6b2-2c00b8550e39.png)
+![ER Diagram GorgeousGlam](https://user-images.githubusercontent.com/105914405/220267222-57ecec52-e4d3-42c1-a9e7-4a3f31728670.png)
 
 
 
