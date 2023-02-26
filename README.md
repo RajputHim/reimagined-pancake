@@ -69,3 +69,8 @@ https://localhost:8888/
 https://localhost:8888/swagger-ui.html
 ```
 
+### Deployed Link
+```
+https://reimagined-pancake-production.up.railway.app/swagger-ui/index.html#/
+```
+
